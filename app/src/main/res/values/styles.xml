@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- login button style -->
+    <style name="srp_button" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/login_btn_selector</item>
+    </style>
+
+    <!-- action bar title style -->
+    <style name="RobotoBoldTextAppearance">
+        <item name="android:fontFamily">@font/architects_daughter</item>
+    </style>
+
+    <!-- toolbar menu style -->
+    <style name="MyDarkToolbarStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/orange_medium</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
+    <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_baseline_delete_24</item>
+        <item name="android:background">?android:attr/actionBarItemBackground</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <!-- some style for the options menu -->
+    <style name="PopupMenuListView" parent="@style/Widget.AppCompat.ListView.DropDown">
+        <item name="android:divider">@color/orange_medium</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:dividerPadding">8dp</item>
+    </style>
+
+    <!-- some offset for the options menu -->
+    <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:dropDownHorizontalOffset">-12dp</item>
+        <item name="android:dropDownVerticalOffset">64dp</item>
+    </style>
+
+    <style name="Theme.ShoppingListMS.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ShoppingListMS.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ShoppingListMS.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
+</resources>

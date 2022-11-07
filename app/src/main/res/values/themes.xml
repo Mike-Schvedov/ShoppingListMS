@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ShoppingListMS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/orange_medium</item>
+        <item name="colorSecondaryVariant">@color/orange_medium</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" >@color/orange_weak</item>
+        <!-- Navigation bar color. -->
+        <item name="android:navigationBarColor">@color/white</item>
+        <!-- overflow 3 dots color -->
+        <item name="android:textColorSecondary">@color/white</item>
+        <!-- light version of the navigation var -->
+        <item name="android:windowLightNavigationBar">true</item>
+        <!-- custom options menu style(defined as separate style bellow). -->
+        <item name="android:actionOverflowButtonStyle">@style/MyActionButtonOverflow</item>
+        <!-- some style for the options menu -->
+        <item name="android:dropDownListViewStyle">@style/PopupMenuListView</item>
+        <!-- offset for the options menu -->
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+    </style>
+</resources>
