@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    tools:context=".SecondFragment">
+    tools:context="ui.home.SecondFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mylist_toolbar"

@@ -6,13 +6,13 @@
         android:id="@+id/delete_selected"
         android:orderInCategory="100"
         android:title="Delete Selected"
-        android:iconTint="@color/black"
+        android:fontFamily="@font/architects_daughter"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/delete_all"
         android:orderInCategory="100"
         android:title="Delete All"
-        android:iconTint="@color/black"
+        android:fontFamily="@font/architects_daughter"
         app:showAsAction="never" />
 </menu>

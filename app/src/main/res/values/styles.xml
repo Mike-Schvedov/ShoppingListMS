@@ -45,6 +45,9 @@
 
     <style name="Theme.ShoppingListMS.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-
+    <style name="dialog_animation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
 
 </resources>

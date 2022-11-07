@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class LoginFragment : Fragment() {
 
     // ViewModel
-    lateinit var loginViewModel: LoginViewModel
+    private lateinit var loginViewModel: LoginViewModel
 
     // Binding
     private var _binding: FragmentLoginBinding? = null
@@ -41,9 +41,6 @@ class LoginFragment : Fragment() {
         setListeners()
 
         setCollectors()
-
-
-
 
         return root
 

@@ -15,8 +15,6 @@ class LoginViewModel : ViewModel() {
     private var _errorMessage = MutableStateFlow("")
     var errorMessage = _errorMessage
 
-
-    //TODO: ASK - should we leave combine and add seperate boolean for each field?
     val loginState  =
         combine(_emailInput, _passwordInput) { emailInput, passwordInput ->
             // check if the format is valid
@@ -37,10 +35,7 @@ class LoginViewModel : ViewModel() {
         _emailInput.value = name
     }
 
-
     fun setPasswordInput(password: String) {
         _passwordInput.value = password
     }
-
-
 }
