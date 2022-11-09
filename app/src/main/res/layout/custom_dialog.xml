@@ -1,133 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="330dp"
+    android:layout_height="400dp"
     android:layout_gravity="center"
     android:background="@drawable/custom_dialog_bg"
     android:gravity="center"
+    android:layout_margin="48dp"
     android:orientation="vertical"
-    android:paddingHorizontal="48dp"
-    android:paddingVertical="16dp">
+    >
 
     <TextView
         android:id="@+id/txt_dia"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
+        android:fontFamily="@font/baloo"
         android:gravity="center"
-        android:text="expense"
-        android:textColor="@color/purple_500"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:text="Add to list"
+        android:textColor="@color/orange_medium"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/description_edittext"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="10dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-      android:layout_marginHorizontal="8dp"
+        android:layout_marginHorizontal="18dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/purple_700"/>
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="140dp"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"/>
+        app:layout_constraintTop_toBottomOf="@id/txt_dia"
+        android:background="@color/orange_medium"/>
+
     <EditText
         android:id="@+id/description_edittext"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="16dp"
         android:autofillHints=""
         android:background="@drawable/edittext_selector"
         android:cursorVisible="true"
+        android:fontFamily="@font/baloo"
         android:gravity="center"
-        android:hint="תיאור"
-        android:inputType="textMultiLine"
+        android:hint="Item"g
+        android:inputType="text"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
         android:selectAllOnFocus="true"
         android:textColor="@color/black"
-        android:textColorHighlight="@color/purple_200"
-        android:textColorHint="@color/purple_200"
+        android:textColorHighlight="@color/orange_weak"
+        android:textColorHint="@color/orange_weak"
         android:textCursorDrawable="@color/black"
         android:textSize="22sp"
-        android:layout_marginBottom="16dp"
-        android:textStyle="bold" />
+
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@id/amount_edittext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="48dp"
-        android:autofillHints=""
         android:id="@+id/amount_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="16dp"
+        android:autofillHints=""
         android:background="@drawable/edittext_selector"
         android:cursorVisible="true"
+        android:fontFamily="@font/baloo"
         android:gravity="center"
-        android:hint="amount"
+        android:hint="Amount"
         android:inputType="number"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
         android:selectAllOnFocus="true"
         android:textColor="@color/black"
-        android:textColorHighlight="@color/purple_200"
-        android:textColorHint="@color/purple_200"
+        android:textColorHighlight="@color/orange_weak"
+        android:textColorHint="@color/orange_weak"
         android:textCursorDrawable="@color/black"
         android:textSize="22sp"
-        android:layout_marginBottom="16dp"
-        android:textStyle="bold" />
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@id/guideline_2_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/save_button"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="category"
-        android:id="@+id/text_input_layout"
-        android:layoutDirection="rtl"
-        android:textColorHint="@color/black"
-        app:boxStrokeColor="@color/purple_500"
-        app:hintTextColor="@color/black">
+        android:background="@drawable/button_bg"
+        android:clickable="true"
+        android:fontFamily="@font/baloo"
+        android:padding="22dp"
+        android:shadowColor="@color/black"
+        android:text="save"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_middle_vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_2_horizontal" />
 
-
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:inputType="none"
-            android:layoutDirection="rtl"
-          />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancel_button"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:gravity="center"
-        android:orientation="horizontal" >
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:background="@drawable/button_bg"
-            android:padding="16dp"
-            android:text="cancel"
-            android:clickable="true"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/save_button"
-            android:shadowColor="@color/black"
-            android:layout_width="wrap_content"
-            android:clickable="true"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_bg"
-            android:padding="16dp"
-            android:text="save"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_bg"
+        android:clickable="true"
+        android:fontFamily="@font/baloo"
+        android:padding="22dp"
+        android:text="cancel"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_middle_vertical"
+        app:layout_constraintTop_toBottomOf="@id/guideline_2_horizontal" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_2_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_middle_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>

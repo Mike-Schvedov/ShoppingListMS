@@ -20,11 +20,13 @@
         <entry key="..\:/Users/MS220/AndroidStudioProjects/ShoppingListMS/app/src/main/res/menu/menu_main.xml" value="0.16447368421052633" />
         <entry key="app/src/main/res/drawable/button_bg.xml" value="0.1045" />
         <entry key="app/src/main/res/drawable/custom_dialog_bg.xml" value="0.1045" />
+        <entry key="app/src/main/res/drawable/edittext_bg_focused.xml" value="0.1835" />
         <entry key="app/src/main/res/drawable/edittext_selector.xml" value="0.1045" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/custom_dialog.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/custom_dialog.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_second.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.14444444444444443" />
       </map>

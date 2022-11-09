@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    tools:context="ui.home.SecondFragment">
+    tools:context="ui.home.HomeFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mylist_toolbar"
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/architects_daughter"
+            android:fontFamily="@font/baloo"
             android:text="@string/my_list_title"
             android:textColor="@color/white"
             android:textSize="26sp" />
