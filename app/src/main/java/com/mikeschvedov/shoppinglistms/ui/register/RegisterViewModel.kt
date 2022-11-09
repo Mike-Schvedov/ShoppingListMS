@@ -5,12 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.shareIn
+import javax.inject.Inject
 
-class RegisterViewModel: ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val firebaseAuth: FirebaseAuth
+): ViewModel() {
 
     // Input flows
     private val _emailInput = MutableStateFlow("")
@@ -48,5 +53,9 @@ class RegisterViewModel: ViewModel() {
 
     fun setConfirmPasswordInput(confirm: String) {
         _confirmPasswordInput.value = confirm
+    }
+
+    fun getAuthentication(): FirebaseAuth {
+        return firebaseAuth
     }
 }

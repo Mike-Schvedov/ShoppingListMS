@@ -3,10 +3,15 @@ package com.mikeschvedov.shoppinglistms.ui.login
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mikeschvedov.shoppinglistms.models.state.LoginState
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val firebaseAuth: FirebaseAuth
+) : ViewModel() {
 
     // Input flows
     private val _emailInput = MutableStateFlow("")
@@ -37,5 +42,9 @@ class LoginViewModel : ViewModel() {
 
     fun setPasswordInput(password: String) {
         _passwordInput.value = password
+    }
+
+    fun getAuthentication(): FirebaseAuth {
+        return firebaseAuth
     }
 }

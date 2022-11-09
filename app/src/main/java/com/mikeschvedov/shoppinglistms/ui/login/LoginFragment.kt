@@ -14,16 +14,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentLoginBinding
-import com.mikeschvedov.shoppinglistms.models.state.LoginState
 import com.mikeschvedov.shoppinglistms.util.setCardFocus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
-
-    var mAuth = FirebaseAuth.getInstance()
-    var mUser = mAuth.currentUser
 
     // ViewModel
     private lateinit var loginViewModel: LoginViewModel
@@ -62,13 +58,12 @@ class LoginFragment : Fragment() {
 
 
     private fun setListeners() {
-
         binding.apply {
             // ----------------------- OnClick Listeners ----------------------- //
             binding.loginButton.setOnClickListener {
                 val emailInput = binding.edittextEmail.text.toString()
                 val passwordInput = binding.edittextPassword.text.toString()
-                mAuth.signInWithEmailAndPassword(emailInput, passwordInput)
+                loginViewModel.getAuthentication().signInWithEmailAndPassword(emailInput, passwordInput)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             loginIntoApp()

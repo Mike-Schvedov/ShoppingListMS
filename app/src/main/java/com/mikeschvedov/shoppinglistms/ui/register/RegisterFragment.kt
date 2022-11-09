@@ -14,13 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentRegisterBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class RegisterFragment : Fragment() {
-    // TODO inject into viewmodel later
-    lateinit var mAuth: FirebaseAuth
-    private var mUser: FirebaseUser? = null
 
     // ViewModel
     private lateinit var registerViewModel: RegisterViewModel
@@ -40,9 +38,6 @@ class RegisterFragment : Fragment() {
         // ----------------------- Binding ----------------------- //
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        mAuth = FirebaseAuth.getInstance()
-        mUser = mAuth.currentUser
 
         setListeners()
 
@@ -66,7 +61,7 @@ class RegisterFragment : Fragment() {
             val email = binding.edittextEmail.text.toString()
             val password = binding.edittextPassword.text.toString()
 
-            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+            registerViewModel.getAuthentication().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful){
                     Toast.makeText(requireContext(), "Registration Complete", Toast.LENGTH_SHORT).show()
                     takeUserToHomeFragment()

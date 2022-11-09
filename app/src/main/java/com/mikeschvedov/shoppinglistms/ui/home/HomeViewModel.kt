@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseUser
 import com.mikeschvedov.shoppinglistms.data.mediator.MediatorProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val mediator: MediatorProtocol
+    private val mediator: MediatorProtocol,
+    private val currentUser: FirebaseUser?
     ): ViewModel() {
 
 //    private val adapter = GroceryListAdapter() { shipCallback ->
@@ -54,5 +56,9 @@ class HomeViewModel @Inject constructor(
 
     fun deleteMarkedItems() {
         TODO("Not yet implemented")
+    }
+
+    fun getCurrentUser(): FirebaseUser? {
+       return currentUser
     }
 }

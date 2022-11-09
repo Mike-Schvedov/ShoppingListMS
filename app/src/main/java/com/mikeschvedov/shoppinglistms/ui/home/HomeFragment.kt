@@ -37,8 +37,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-
-
         // ----------------------- ViewModel ----------------------- //
         homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
@@ -46,10 +44,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val mAuth = FirebaseAuth.getInstance()
-        val mUser = mAuth.currentUser!!
-
-        binding.textviewtoken.text = mUser.uid
+        binding.textviewtoken.text = homeViewModel.getCurrentUser()?.uid
 
         binding.addNewItemBtn.setOnClickListener {
             openAddEntryDialog()
@@ -69,7 +64,6 @@ class HomeFragment : Fragment() {
                 else -> false
             }
         }
-
         return root
     }
 
