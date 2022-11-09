@@ -1,7 +1,9 @@
 package com.mikeschvedov.shoppinglistms.di
 
-import com.mikeschvedov.shoppinglistms.data.repository.Repository
-import com.mikeschvedov.shoppinglistms.data.repository.RepositoryImpl
+import com.mikeschvedov.shoppinglistms.data.mediator.Mediator
+import com.mikeschvedov.shoppinglistms.data.mediator.MediatorProtocol
+import com.mikeschvedov.shoppinglistms.data.repository.RepositoryProtocol
+import com.mikeschvedov.shoppinglistms.data.repository.DatabaseRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,8 +19,15 @@ annotation class RoomRepository
 @InstallIn(SingletonComponent::class)
 abstract class InterfacesModule {
 
+    // -- Mediator -- //
     @Binds
     @Singleton
-    abstract fun provideRepository(roomRepositoryIMPL: RepositoryImpl) : Repository
+    abstract fun provideMediator(mediator: Mediator) : MediatorProtocol
+
+    // -- Repositories -- //
+    @Binds
+    @Singleton
+    abstract fun provideDatabaseRepository(databaseRepository: DatabaseRepository) : RepositoryProtocol
+
 
 }

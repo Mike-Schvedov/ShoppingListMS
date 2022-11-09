@@ -4,15 +4,16 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id("dagger.hilt.android.plugin")
+    id 'com.google.gms.google-services'
 }
 
 android {
-    compileSdk 33
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.mikeschvedov.shoppinglistms"
         minSdk 28
-        targetSdk 33
+        targetSdk 32
         versionCode 1
         versionName "1.0"
 
@@ -39,7 +40,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -90,7 +91,9 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
     // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
 
     // Declare the dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'

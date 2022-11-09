@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/gradient_toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shopping_list_logo"
+            android:text="@string/shopping_list_title"
+            android:scaleType="fitCenter"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.26"
+        app:layout_constraintHeight_percent="0.4" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/edittext_email"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="emailAddress"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_baseline_email_24"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/orange_medium"
+            android:elevation="20dp"
+            android:fontFamily="@font/baloo"
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress"
+            android:padding="16dp"
+            android:textColor="@color/orange_weak"
+            android:textColorHint="@color/light_gray"
+            android:textSize="20sp" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/edittext_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="password"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_baseline_vpn_key_24"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/orange_medium"
+            android:elevation="20dp"
+            android:focusable="true"
+            android:fontFamily="@font/baloo"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:textColor="@color/orange_weak"
+            android:textColorHint="@color/light_gray"
+            android:textSize="20sp" />
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginBottom="32dp"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="cardView_email,cardView_password"
+        app:flow_verticalGap="32dp"
+        app:flow_wrapMode="aligned"
+        app:layout_constraintBottom_toTopOf="@id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.55" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/login_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="64dp"
+        android:layout_marginTop="64dp"
+        android:autofillHints="password"
+        android:background="@drawable/login_btn_selector"
+        android:drawablePadding="16dp"
+        android:elevation="20dp"
+        android:fontFamily="@font/baloo"
+        android:padding="12dp"
+        android:paddingVertical="16dp"
+        android:text="Register"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:clickable="true"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        android:focusable="true">
+
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <TextView
+        android:id="@+id/register_goto_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="name"
+        android:elevation="20dp"
+        android:fontFamily="@font/baloo"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="@string/register_goto"
+        android:textColor="@color/orange_weak"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="282dp"
+        tools:layout_editor_absoluteY="448dp" />
+
+    <TextView
+        android:id="@+id/register_suggestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="name"
+        android:elevation="20dp"
+        android:fontFamily="@font/baloo"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="16dp"
+        android:text="@string/don_t_have_an_account"
+        android:textColor="#888787"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:constraint_referenced_ids="register_suggestion,register_goto_link"
+        app:flow_wrapMode="aligned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

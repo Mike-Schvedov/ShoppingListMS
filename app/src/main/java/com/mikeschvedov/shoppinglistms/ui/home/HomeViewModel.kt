@@ -1,18 +1,51 @@
 package com.mikeschvedov.shoppinglistms.ui.home
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mikeschvedov.shoppinglistms.data.repository.Repository
+import androidx.lifecycle.viewModelScope
+import com.mikeschvedov.shoppinglistms.data.mediator.MediatorProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
+import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
+import com.mikeschvedov.shoppinglistms.util.SingleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: Repository
+    private val mediator: MediatorProtocol
     ): ViewModel() {
 
+//    private val adapter = GroceryListAdapter() { shipCallback ->
+//        _selectedShip.postValue(SingleEvent(shipCallback))
+//    }
+
+    val groceryListLiveData: LiveData<List<GroceryItem>> get()= _groceryListLiveData
+    private val _groceryListLiveData = MutableLiveData<List<GroceryItem>>()
+
+    private val _selectedShip = MutableLiveData<SingleEvent<GroceryItem>>()
+    val selectedShip: LiveData<SingleEvent<GroceryItem>> get() = _selectedShip
+
+
+    // ----- REMOTE DATABASE ----- //
     fun saveNewEntry(groceryItem: GroceryItem) {
-      repository.saveNewEntry(groceryItem)
+      mediator.saveNewEntry(groceryItem)
+    }
+
+    fun fetchGroceryData(){
+        viewModelScope.launch {
+            mediator.fetchGroceryData()
+                .collect {
+                    _groceryListLiveData.postValue(it)
+                }
+        }
+    }
+
+    fun toggleItemMarked(id: String, isMarked: Boolean){
+        viewModelScope.launch {
+            mediator.toggleItemMarked(id, isMarked)
+        }
     }
 
     fun deleteAll() {

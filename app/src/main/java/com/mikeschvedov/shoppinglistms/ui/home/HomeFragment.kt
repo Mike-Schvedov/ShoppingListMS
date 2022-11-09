@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
@@ -35,12 +36,20 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
+
         // ----------------------- ViewModel ----------------------- //
         homeViewModel =
             ViewModelProvider(this)[HomeViewModel::class.java]
         // ----------------------- View Binding ----------------------- //
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        val mAuth = FirebaseAuth.getInstance()
+        val mUser = mAuth.currentUser!!
+
+        binding.textviewtoken.text = mUser.uid
 
         binding.addNewItemBtn.setOnClickListener {
             openAddEntryDialog()

@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
                 loginIntoApp()
             }
             registerGotoLink.setOnClickListener {
-                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                findNavController().navigate(R.id.action_LoginFragment_to_registerFragment)
             }
         }
     }
