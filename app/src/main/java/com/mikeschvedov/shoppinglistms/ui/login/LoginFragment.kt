@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentLoginBinding
 import com.mikeschvedov.shoppinglistms.models.state.LoginState
@@ -19,6 +21,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
+
+    var mAuth = FirebaseAuth.getInstance()
+    var mUser = mAuth.currentUser
 
     // ViewModel
     private lateinit var loginViewModel: LoginViewModel
@@ -40,11 +45,9 @@ class LoginFragment : Fragment() {
         val root: View = binding.root
 
         setListeners()
-
         setCollectors()
 
         return root
-
     }
 
     private fun setCollectors() {
@@ -61,6 +64,34 @@ class LoginFragment : Fragment() {
     private fun setListeners() {
 
         binding.apply {
+            // ----------------------- OnClick Listeners ----------------------- //
+            binding.loginButton.setOnClickListener {
+                val emailInput = binding.edittextEmail.text.toString()
+                val passwordInput = binding.edittextPassword.text.toString()
+                mAuth.signInWithEmailAndPassword(emailInput, passwordInput)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            loginIntoApp()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "${task.exception}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+            }
+            registerGotoLink.setOnClickListener {
+                findNavController().navigate(R.id.action_LoginFragment_to_registerFragment)
+            }
+            // ----------------------- Text Changed Listeners ----------------------- //
+            edittextEmail.addTextChangedListener {
+                loginViewModel.setEmailInput(it.toString())
+            }
+            edittextPassword.addTextChangedListener {
+                loginViewModel.setPasswordInput(it.toString())
+            }
             // ----------------------- Focus Listeners ----------------------- //
             edittextEmail.onFocusChangeListener =
                 View.OnFocusChangeListener { v, hasFocus ->
@@ -74,20 +105,6 @@ class LoginFragment : Fragment() {
                         requireContext().setCardFocus(this, hasFocus)
                     }
                 }
-            // ----------------------- Text Changed Listeners ----------------------- //
-            edittextEmail.addTextChangedListener {
-                loginViewModel.setEmailInput(it.toString())
-            }
-            edittextPassword.addTextChangedListener {
-                loginViewModel.setPasswordInput(it.toString())
-            }
-            // ----------------------- OnClick Listeners ----------------------- //
-            binding.loginButton.setOnClickListener {
-                loginIntoApp()
-            }
-            registerGotoLink.setOnClickListener {
-                findNavController().navigate(R.id.action_LoginFragment_to_registerFragment)
-            }
         }
     }
 

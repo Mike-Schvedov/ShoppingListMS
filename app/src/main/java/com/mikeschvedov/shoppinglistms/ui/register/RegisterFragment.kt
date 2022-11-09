@@ -1,6 +1,5 @@
 package com.mikeschvedov.shoppinglistms.ui.register
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,15 +10,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.mikeschvedov.shoppinglistms.R
-import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
-import com.mikeschvedov.shoppinglistms.databinding.FragmentLoginBinding
 import com.mikeschvedov.shoppinglistms.databinding.FragmentRegisterBinding
-import com.mikeschvedov.shoppinglistms.ui.home.HomeViewModel
-import com.mikeschvedov.shoppinglistms.ui.login.LoginViewModel
 import kotlinx.coroutines.launch
 
 
@@ -61,16 +55,14 @@ class RegisterFragment : Fragment() {
         lifecycleScope.launch {
             registerViewModel.loginState.collect { loginState: Boolean ->
                 // if both fields are valid make the login button enabled
-                binding.loginButton.isEnabled = loginState
+                binding.registerButton.isEnabled = loginState
             }
         }
     }
 
     private fun setListeners() {
-        binding.loginButton.setOnClickListener {
-
-            //TODO add confirmation password check
-
+        // ----------------------- OnClick Listeners ----------------------- //
+        binding.registerButton.setOnClickListener {
             val email = binding.edittextEmail.text.toString()
             val password = binding.edittextPassword.text.toString()
 
@@ -83,18 +75,23 @@ class RegisterFragment : Fragment() {
                 }
             }
         }
+        binding.loginGotoLink.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_LoginFragment)
+        }
 
+        // ----------------------- Text Changed Listeners ----------------------- //
         binding.edittextEmail.addTextChangedListener {
             registerViewModel.setEmailInput(it.toString())
         }
         binding.edittextPassword.addTextChangedListener {
             registerViewModel.setPasswordInput(it.toString())
         }
+        binding.edittextConfirmPassword.addTextChangedListener {
+            registerViewModel.setConfirmPasswordInput(it.toString())
+        }
     }
 
     private fun takeUserToHomeFragment() {
         findNavController().navigate(R.id.action_registerFragment_to_HomeFragment)
     }
-
-
 }

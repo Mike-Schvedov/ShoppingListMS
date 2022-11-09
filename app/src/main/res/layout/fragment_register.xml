@@ -18,18 +18,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/shopping_list_logo"
-            android:text="@string/shopping_list_title"
-            android:scaleType="fitCenter"
-            android:layout_marginBottom="16dp"
-            android:paddingStart="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            app:layout_constraintEnd_toEndOf="parent"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fontFamily="@font/baloo"
+        android:textColor="@color/white"
+        android:text="@string/new_user"
+        android:gravity="center"
+        android:layout_marginEnd="16dp"
+        android:textSize="36sp"/>
     </androidx.appcompat.widget.Toolbar>
-
 
 
     <androidx.constraintlayout.widget.Guideline
@@ -37,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.26"
+        app:layout_constraintGuide_percent="0.1"
         app:layout_constraintHeight_percent="0.4" />
 
     <com.google.android.material.card.MaterialCardView
@@ -95,16 +93,47 @@
             android:elevation="20dp"
             android:focusable="true"
             android:fontFamily="@font/baloo"
-            android:hint="@string/password_hint"
+            android:hint="@string/new_password"
             android:inputType="textPassword"
             android:padding="16dp"
             android:textColor="@color/orange_weak"
             android:textColorHint="@color/light_gray"
             android:textSize="20sp" />
 
-
     </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView_confirm_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/edittext_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="password"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_baseline_vpn_key_24"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/orange_medium"
+            android:elevation="20dp"
+            android:focusable="true"
+            android:fontFamily="@font/baloo"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:textColor="@color/orange_weak"
+            android:textColorHint="@color/light_gray"
+            android:textSize="20sp" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/flow"
@@ -114,7 +143,7 @@
         android:layout_marginTop="96dp"
         android:layout_marginBottom="32dp"
         android:orientation="vertical"
-        app:constraint_referenced_ids="cardView_email,cardView_password"
+        app:constraint_referenced_ids="cardView_email,cardView_password, cardView_confirm_password"
         app:flow_verticalGap="32dp"
         app:flow_wrapMode="aligned"
         app:layout_constraintBottom_toTopOf="@id/guideline4"
@@ -131,7 +160,7 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/login_button"
+        android:id="@+id/register_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="64dp"
@@ -143,7 +172,7 @@
         android:fontFamily="@font/baloo"
         android:padding="12dp"
         android:paddingVertical="16dp"
-        android:text="Register"
+        android:text="@string/register"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:clickable="true"
@@ -156,7 +185,7 @@
     </androidx.appcompat.widget.AppCompatButton>
 
     <TextView
-        android:id="@+id/register_goto_link"
+        android:id="@+id/login_goto_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autofillHints="name"
@@ -164,7 +193,7 @@
         android:fontFamily="@font/baloo"
         android:gravity="center"
         android:paddingVertical="16dp"
-        android:text="@string/register_goto"
+        android:text="@string/login"
         android:textColor="@color/orange_weak"
         android:textSize="16sp"
         tools:layout_editor_absoluteX="282dp"
@@ -180,7 +209,7 @@
         android:gravity="center"
         android:paddingHorizontal="8dp"
         android:paddingVertical="16dp"
-        android:text="@string/don_t_have_an_account"
+        android:text="@string/already_have_an_account"
         android:textColor="#888787"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -190,11 +219,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:constraint_referenced_ids="register_suggestion,register_goto_link"
+        app:constraint_referenced_ids="register_suggestion,login_goto_link"
         app:flow_wrapMode="aligned"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_button" />
+        app:layout_constraintTop_toBottomOf="@+id/register_button" />
 
 
 
