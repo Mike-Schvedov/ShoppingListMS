@@ -18,8 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
+import dagger.hilt.EntryPoint
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     // ViewModel

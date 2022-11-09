@@ -1,12 +1,18 @@
 package com.mikeschvedov.shoppinglistms.ui.home
 
 import androidx.lifecycle.ViewModel
+import com.mikeschvedov.shoppinglistms.data.repository.Repository
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel: ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: Repository
+    ): ViewModel() {
 
     fun saveNewEntry(groceryItem: GroceryItem) {
-       println("this is the item: ${groceryItem.name} | ${groceryItem.amount}")
+      repository.saveNewEntry(groceryItem)
     }
 
     fun deleteAll() {

@@ -48,7 +48,7 @@
         android:cursorVisible="true"
         android:fontFamily="@font/baloo"
         android:gravity="center"
-        android:hint="Item"g
+        android:hint="Item"
         android:inputType="text"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"

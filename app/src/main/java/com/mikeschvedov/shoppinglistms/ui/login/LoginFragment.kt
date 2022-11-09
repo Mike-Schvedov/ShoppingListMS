@@ -14,9 +14,10 @@ import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentLoginBinding
 import com.mikeschvedov.shoppinglistms.models.state.LoginState
 import com.mikeschvedov.shoppinglistms.util.setCardFocus
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     // ViewModel
