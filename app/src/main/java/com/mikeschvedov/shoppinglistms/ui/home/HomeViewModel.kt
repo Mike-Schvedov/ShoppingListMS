@@ -19,9 +19,9 @@ class HomeViewModel @Inject constructor(
     private val currentUser: FirebaseUser?
     ): ViewModel() {
 
-//    private val adapter = GroceryListAdapter() { shipCallback ->
-//        _selectedShip.postValue(SingleEvent(shipCallback))
-//    }
+    private val adapter = GroceryListAdapter() { shipCallback ->
+        _selectedShip.postValue(SingleEvent(shipCallback))
+    }
 
     val groceryListLiveData: LiveData<List<GroceryItem>> get()= _groceryListLiveData
     private val _groceryListLiveData = MutableLiveData<List<GroceryItem>>()
@@ -32,13 +32,16 @@ class HomeViewModel @Inject constructor(
 
     // ----- REMOTE DATABASE ----- //
     fun saveNewEntry(groceryItem: GroceryItem) {
-      mediator.saveNewEntry(groceryItem)
+        viewModelScope.launch {
+            mediator.saveNewEntry(groceryItem)
+        }
     }
 
     fun fetchGroceryData(){
         viewModelScope.launch {
             mediator.fetchGroceryData()
                 .collect {
+                    print("viewmodel should get this: ${it.toString()}")
                     _groceryListLiveData.postValue(it)
                 }
         }
@@ -60,5 +63,9 @@ class HomeViewModel @Inject constructor(
 
     fun getCurrentUser(): FirebaseUser? {
        return currentUser
+    }
+
+    fun getAdapter(): GroceryListAdapter {
+        return adapter
     }
 }

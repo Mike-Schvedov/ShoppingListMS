@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.mikeschvedov.shoppinglistms.data.repository.RepositoryProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -19,9 +20,10 @@ class Mediator @Inject constructor(
         databaseRepository.toggleItemMarked(id, isMarked)
     }
 
-    override fun fetchGroceryData(): Flow<List<GroceryItem>> {
-        TODO("Not yet implemented")
+    override suspend fun fetchGroceryData(): Flow<List<GroceryItem>> = flow {
+        databaseRepository.fetchGroceryData().collect{
+            emit(it)
+        }
     }
-
 
 }

@@ -10,5 +10,5 @@ interface MediatorProtocol {
 
     fun toggleItemMarked(id: String, isMarked: Boolean)
 
-    fun fetchGroceryData() : Flow<List<GroceryItem>>
+    suspend fun fetchGroceryData() : Flow<List<GroceryItem>>
 }

@@ -2,9 +2,10 @@ package com.mikeschvedov.shoppinglistms.data.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.mikeschvedov.shoppinglistms.data.database.remote.FirebaseManager
+import com.mikeschvedov.shoppinglistms.interfaces.OnDataChangedListener
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 
@@ -13,13 +14,16 @@ class DatabaseRepository @Inject constructor(
 ) : RepositoryProtocol {
 
     override fun saveNewEntry(groceryItem: GroceryItem) {
-        println("this is the item inside the repo: ${groceryItem.name} | ${groceryItem.amount}")
+        firebaseManager.addNewEntry(groceryItem)
     }
 
-    override fun fetchGroceryData(): Flow<List<GroceryItem>>
-    {
-    return flowOf()
+    override suspend  fun fetchGroceryData(): Flow<List<GroceryItem>> = callbackFlow {
+        var callback  : OnDataChangedListener? = null
+        callback = OnDataChangedListener { items -> trySend(items) }
+        firebaseManager.readAllItemsFromFirebase (callback)
+        awaitClose{ callback = null}
     }
+
 
     override fun toggleItemMarked(id: String, isMarked: Boolean){
         //update item as marked

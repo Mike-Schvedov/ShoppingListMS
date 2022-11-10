@@ -3,14 +3,13 @@ package com.mikeschvedov.shoppinglistms.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
-import com.squareup.picasso.Picasso
+
 import javax.inject.Inject
 
 class GroceryListAdapter @Inject constructor(private val listener: OnItemClickListener) :
@@ -38,18 +37,16 @@ class GroceryListAdapter @Inject constructor(private val listener: OnItemClickLi
     }
 
     class GroceryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        var imageview: ImageView =
-//            itemView.findViewById(R.id.profile_image)
-//        var title: TextView =
-//            itemView.findViewById(R.id.title_text_view)
-//        var itemLayout: ConstraintLayout =
-//            itemView.findViewById(R.id.item_layout)
+        var name: TextView = itemView.findViewById(R.id.name_holder_text_view)
+        var amount: TextView = itemView.findViewById(R.id.amount_holder_text_view)
+        var itemLayout: ConstraintLayout =
+            itemView.findViewById(R.id.item_layout)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryViewHolder {
         return GroceryViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.custom_dialog,
+                R.layout.item_view_holder,
                 parent, false
             )
         )
@@ -58,14 +55,25 @@ class GroceryListAdapter @Inject constructor(private val listener: OnItemClickLi
     override fun onBindViewHolder(holder: GroceryViewHolder, position: Int) {
 
         val item = list[position]
-//
-//        // --- Setting the title --- //
-//        holder.title.text = item.name
-//
-//        // -- Sending the clicked item as callback -- //
-//        holder.itemLayout.setOnClickListener {
-//            listener.onItemClicked(item)
-//        }
+
+        // --- Setting the title --- //
+        holder.name.text = item.name
+
+        // --- Setting the amount --- //
+        if (item.amount != null){
+            holder.amount.text = item.amount
+        }else{
+            holder.amount.text = ""
+        }
+
+
+        // --- Setting isMarked --- //
+       // holder.name.text = item.name
+
+        // -- Sending the clicked item as callback -- //
+        holder.itemLayout.setOnClickListener {
+            listener.onItemClicked(item)
+        }
 
     }
 

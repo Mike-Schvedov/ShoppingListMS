@@ -15,10 +15,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
+import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,6 +34,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    // Adapter
+    lateinit var adapter: GroceryListAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +48,17 @@ class HomeFragment : Fragment() {
         // ----------------------- View Binding ----------------------- //
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        // ----------------------- Adapter ----------------------- //
+        adapter = homeViewModel.getAdapter()
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
+
+        //TODO first time every shopping list creation method sharedpref
+
+        // onStart  grocery fetching
+        homeViewModel.fetchGroceryData()
+
+        observers()
 
         binding.textviewtoken.text = homeViewModel.getCurrentUser()?.uid
 
@@ -67,6 +83,12 @@ class HomeFragment : Fragment() {
         return root
     }
 
+    private fun observers() {
+        homeViewModel.groceryListLiveData.observe(viewLifecycleOwner) { items: List<GroceryItem> ->
+            adapter.setNewData(items)
+        }
+    }
+
 
     private fun openAddEntryDialog(){
         // Creating a dialog
@@ -87,7 +109,7 @@ class HomeFragment : Fragment() {
 
             if(nameInput.isNotBlank()){
                 homeViewModel.saveNewEntry(
-                    GroceryItem ( name = nameInput, amount = amountInput ))
+                    GroceryItem ( name = nameInput, amount = amountInput, isMarked = false))
                 // Hiding the soft keyboard
                 if (it != null){
                     val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
