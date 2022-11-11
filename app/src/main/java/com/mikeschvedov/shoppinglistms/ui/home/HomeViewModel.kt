@@ -19,15 +19,18 @@ class HomeViewModel @Inject constructor(
     private val currentUser: FirebaseUser?
     ): ViewModel() {
 
-    private val adapter = GroceryListAdapter() { shipCallback ->
-        _selectedShip.postValue(SingleEvent(shipCallback))
+    private val adapter = GroceryListAdapter() { itemClicked ->
+        _selectedItem.postValue(SingleEvent(itemClicked))
+        // We take the current state and invert it
+        val changedState = itemClicked.marked.not()
+        toggleItemMarked(itemClicked, changedState)
     }
 
     val groceryListLiveData: LiveData<List<GroceryItem>> get()= _groceryListLiveData
     private val _groceryListLiveData = MutableLiveData<List<GroceryItem>>()
 
-    private val _selectedShip = MutableLiveData<SingleEvent<GroceryItem>>()
-    val selectedShip: LiveData<SingleEvent<GroceryItem>> get() = _selectedShip
+    private val _selectedItem = MutableLiveData<SingleEvent<GroceryItem>>()
+    val selectedItem: LiveData<SingleEvent<GroceryItem>> get() = _selectedItem
 
 
     // ----- REMOTE DATABASE ----- //
@@ -47,9 +50,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun toggleItemMarked(id: String, isMarked: Boolean){
+    private fun toggleItemMarked(item: GroceryItem, isMarked: Boolean){
         viewModelScope.launch {
-            mediator.toggleItemMarked(id, isMarked)
+            mediator.toggleItemMarked(item, isMarked)
         }
     }
 

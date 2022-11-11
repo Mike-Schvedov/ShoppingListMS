@@ -109,7 +109,7 @@ class HomeFragment : Fragment() {
 
             if(nameInput.isNotBlank()){
                 homeViewModel.saveNewEntry(
-                    GroceryItem ( name = nameInput, amount = amountInput, isMarked = false))
+                    GroceryItem ( name = nameInput, amount = amountInput, marked = false))
                 // Hiding the soft keyboard
                 if (it != null){
                     val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -143,7 +143,7 @@ class HomeFragment : Fragment() {
         dialogBuilder.setMessage("No item provided!")
             .setCancelable(false)
             .setNegativeButton("Ok", DialogInterface.OnClickListener {
-                    dialog, id -> dialog.cancel()
+                    dialog, _ -> dialog.cancel()
             })
         // create dialog box
         val alert = dialogBuilder.create()

@@ -37,8 +37,8 @@ class FirebaseManager @Inject constructor(
             }
     }
 
-    fun updateItemIsMarked(isMarked: Boolean) {
-        databaseReference.child(rootName).child(shoppinglist).child("isMarked").setValue(isMarked)
+    fun updateItemIsMarked(item: GroceryItem, isMarked: Boolean) {
+        databaseReference.child(rootName).child(shoppinglist).child(item.id).child("marked").setValue(isMarked)
             .addOnSuccessListener {
                 println("Data was updated")
             }
@@ -53,7 +53,7 @@ class FirebaseManager @Inject constructor(
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 items = dataSnapshot.children.mapNotNull { it.getValue(GroceryItem::class.java) }.toList()
                 items.forEach {
-                    println("items: ${it.name} | ${it.amount} | ${it.isMarked}")
+                    println("items: ${it.name} | ${it.amount} | ${it.marked}")
                 }
                 callback.onChange(items)
             }

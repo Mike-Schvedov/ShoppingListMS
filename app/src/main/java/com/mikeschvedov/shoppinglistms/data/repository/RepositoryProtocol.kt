@@ -10,6 +10,6 @@ interface RepositoryProtocol  {
 
     suspend fun fetchGroceryData(): Flow<List<GroceryItem>>
 
-    fun toggleItemMarked(id: String, isMarked: Boolean)
+    fun toggleItemMarked(item: GroceryItem, isMarked: Boolean)
 
 }

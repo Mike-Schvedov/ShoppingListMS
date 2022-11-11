@@ -1,10 +1,8 @@
 package com.mikeschvedov.shoppinglistms.data.mediator
 
-import androidx.lifecycle.MutableLiveData
 import com.mikeschvedov.shoppinglistms.data.repository.RepositoryProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -16,8 +14,8 @@ class Mediator @Inject constructor(
         databaseRepository.saveNewEntry(groceryItem)
     }
 
-    override fun toggleItemMarked(id: String, isMarked: Boolean) {
-        databaseRepository.toggleItemMarked(id, isMarked)
+    override fun toggleItemMarked(item: GroceryItem, isMarked: Boolean) {
+        databaseRepository.toggleItemMarked(item, isMarked)
     }
 
     override suspend fun fetchGroceryData(): Flow<List<GroceryItem>> = flow {

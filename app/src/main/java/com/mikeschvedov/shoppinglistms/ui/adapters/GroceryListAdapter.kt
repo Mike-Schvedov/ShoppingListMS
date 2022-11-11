@@ -1,10 +1,12 @@
 package com.mikeschvedov.shoppinglistms.ui.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mikeschvedov.shoppinglistms.R
@@ -37,10 +39,10 @@ class GroceryListAdapter @Inject constructor(private val listener: OnItemClickLi
     }
 
     class GroceryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var name: TextView = itemView.findViewById(R.id.name_holder_text_view)
-        var amount: TextView = itemView.findViewById(R.id.amount_holder_text_view)
-        var itemLayout: ConstraintLayout =
-            itemView.findViewById(R.id.item_layout)
+        var nameTextView: TextView = itemView.findViewById(R.id.nameTextView_xml)
+        var amountTextView: TextView = itemView.findViewById(R.id.amountTextView_xml)
+        var isMarkedCheckBox: ImageView = itemView.findViewById(R.id.isBoughtItemview)
+        var cardView: CardView = itemView.findViewById(R.id.cardview)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryViewHolder {
@@ -57,24 +59,33 @@ class GroceryListAdapter @Inject constructor(private val listener: OnItemClickLi
         val item = list[position]
 
         // --- Setting the title --- //
-        holder.name.text = item.name
+        holder.nameTextView.text = item.name
 
         // --- Setting the amount --- //
         if (item.amount != null){
-            holder.amount.text = item.amount
+            holder.amountTextView.text = item.amount
         }else{
-            holder.amount.text = ""
+            holder.amountTextView.text = ""
         }
 
+        // --- Setting isMarked UI --- //
+        if (item.marked) {
+            holder.isMarkedCheckBox.setImageResource(R.drawable.checkbox_ckecked)
+        } else {
+            holder.isMarkedCheckBox.setImageResource( R.drawable.checkbox_empty)
+        }
+
+        // Changing the color accordingly
+        if(item.marked){
+            holder.cardView.setCardBackgroundColor(Color.GRAY)
+        }else{
+           holder.cardView.setCardBackgroundColor(Color.WHITE)
+        }
 
         // --- Setting isMarked --- //
-       // holder.name.text = item.name
-
-        // -- Sending the clicked item as callback -- //
-        holder.itemLayout.setOnClickListener {
+        holder.isMarkedCheckBox.setOnClickListener {
             listener.onItemClicked(item)
         }
-
     }
 
     override fun getItemCount(): Int {

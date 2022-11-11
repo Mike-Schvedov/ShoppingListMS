@@ -1,6 +1,5 @@
 package com.mikeschvedov.shoppinglistms.data.repository
 
-import androidx.lifecycle.MutableLiveData
 import com.mikeschvedov.shoppinglistms.data.database.remote.FirebaseManager
 import com.mikeschvedov.shoppinglistms.interfaces.OnDataChangedListener
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
@@ -18,15 +17,15 @@ class DatabaseRepository @Inject constructor(
     }
 
     override suspend  fun fetchGroceryData(): Flow<List<GroceryItem>> = callbackFlow {
-        var callback  : OnDataChangedListener? = null
+        var callback  : OnDataChangedListener?
         callback = OnDataChangedListener { items -> trySend(items) }
         firebaseManager.readAllItemsFromFirebase (callback)
         awaitClose{ callback = null}
     }
 
 
-    override fun toggleItemMarked(id: String, isMarked: Boolean){
-        //update item as marked
+    override fun toggleItemMarked(item: GroceryItem, isMarked: Boolean){
+        firebaseManager.updateItemIsMarked(item, isMarked)
     }
 
 }

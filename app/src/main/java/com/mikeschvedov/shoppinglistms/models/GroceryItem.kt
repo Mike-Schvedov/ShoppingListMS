@@ -6,5 +6,5 @@ data class GroceryItem(
     val id: String = UUID.randomUUID().toString(),
     val name: String = "",
     val amount: String? = null,
-    val isMarked: Boolean = false
+    val marked: Boolean = false
 )
