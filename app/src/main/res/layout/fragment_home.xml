@@ -27,6 +27,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/inner_gradient_toolbar"
         android:elevation="4dp"
+        app:popupTheme="@style/MyToolbarPopupStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

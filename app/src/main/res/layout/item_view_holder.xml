@@ -23,37 +23,43 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/nameTextView_xml"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="12dp"
-                android:paddingTop="8dp"
+                android:layout_height="0dp"
                 android:fontFamily="@font/baloo"
                 android:text="מוצר"
+                android:paddingTop="16dp"
+                android:paddingEnd="4dp"
                 android:textColor="@color/black"
                 android:textDirection="rtl"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/amountTextView_xml"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/isBoughtItemview"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline_vertical"
+                app:layout_constraintEnd_toStartOf="@+id/isBoughtItemview"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/amountTextView_xml"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginBottom="4dp"
-                android:paddingEnd="2dp"
-                android:gravity="right"
+                android:layout_height="0dp"
                 android:textStyle="bold"
-                android:text="כמות"
+                android:text="0"
+                android:gravity="center"
+                android:paddingTop="4dp"
+
                 android:fontFamily="@font/baloo"
                 android:textColor="@color/black"
-                android:textSize="13sp"
+                android:textSize="18sp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/isBoughtItemview" />
+                app:layout_constraintEnd_toStartOf="@+id/guideline_vertical"
+                app:layout_constraintStart_toStartOf="parent" />
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/isBoughtItemview"
@@ -63,7 +69,7 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:padding="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/checkbox_empty" />
 

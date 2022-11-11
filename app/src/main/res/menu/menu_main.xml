@@ -2,17 +2,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.mikeschvedov.shoppinglistms.MainActivity">
-    <item
-        android:id="@+id/delete_selected"
-        android:orderInCategory="100"
-        android:title="Delete Selected"
-        android:fontFamily="@font/architects_daughter"
-        app:showAsAction="never" />
 
     <item
-        android:id="@+id/delete_all"
-        android:orderInCategory="100"
-        android:title="Delete All"
-        android:fontFamily="@font/architects_daughter"
-        app:showAsAction="never" />
+        android:id="@+id/overflowMenu"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/options_delete_selected"
+                android:title="Delete Selected"
+                />
+            <item
+                android:id="@+id/options_delete_all"
+                android:title="Delete All"
+                />
+        </menu>
+    </item>
+    <item
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/options_settings"
+                android:title="Settings"
+                />
+            <item
+                android:id="@+id/options_logout"
+                android:title="Logout"
+                />
+        </menu>
+    </item>
+
 </menu>

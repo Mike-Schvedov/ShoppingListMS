@@ -71,4 +71,6 @@ class HomeViewModel @Inject constructor(
     fun getAdapter(): GroceryListAdapter {
         return adapter
     }
+
+
 }

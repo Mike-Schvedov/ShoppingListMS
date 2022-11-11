@@ -18,7 +18,7 @@
 
     <!-- Style to replace actionbar overflow icon. set item 'android:actionOverflowButtonStyle' in AppTheme -->
     <style name="MyActionButtonOverflow" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
-        <item name="android:src">@drawable/ic_baseline_delete_24</item>
+        <item name="android:src">@drawable/ic_baseline_more_vert_24</item>
         <item name="android:background">?android:attr/actionBarItemBackground</item>
         <item name="tint">@color/white</item>
     </style>
@@ -32,8 +32,8 @@
 
     <!-- some offset for the options menu -->
     <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:dropDownHorizontalOffset">-12dp</item>
-        <item name="android:dropDownVerticalOffset">64dp</item>
+        <item name="android:dropDownHorizontalOffset">-50dp</item>
+        <item name="android:dropDownVerticalOffset">52dp</item>
     </style>
 
     <style name="Theme.ShoppingListMS.NoActionBar">
@@ -48,6 +48,14 @@
     <style name="dialog_animation">
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <!-- style for the options menu -->
+    <style name="MyToolbarPopupStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="strokeColor">@color/orange_medium</item>
+        <item name="borderRound">@dimen/cardview_compat_inset_shadow</item>
+        <item name="android:textColor">@color/black</item>
+
     </style>
 
 </resources>

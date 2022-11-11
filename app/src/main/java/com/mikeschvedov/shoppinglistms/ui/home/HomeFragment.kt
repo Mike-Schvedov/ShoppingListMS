@@ -69,12 +69,16 @@ class HomeFragment : Fragment() {
         binding.mylistToolbar.inflateMenu(R.menu.menu_main)
         binding.mylistToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.delete_selected -> {
+                R.id.options_delete_selected -> {
                    homeViewModel.deleteMarkedItems()
                     true
                 }
-                R.id.delete_all -> {
+                R.id.options_delete_all -> {
                     homeViewModel.deleteAll()
+                    true
+                }
+                R.id.options_settings -> {
+                    openSettingsMenu()
                     true
                 }
                 else -> false
@@ -89,6 +93,9 @@ class HomeFragment : Fragment() {
         }
     }
 
+    fun openSettingsMenu() {
+        TODO("Not yet implemented")
+    }
 
     private fun openAddEntryDialog(){
         // Creating a dialog
