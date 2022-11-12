@@ -32,6 +32,8 @@ class HomeViewModel @Inject constructor(
     private val _selectedItem = MutableLiveData<SingleEvent<GroceryItem>>()
     val selectedItem: LiveData<SingleEvent<GroceryItem>> get() = _selectedItem
 
+    val shoppingListID: LiveData<String> get()= _shoppingListID
+    private val _shoppingListID = MutableLiveData<String>()
 
     // ----- REMOTE DATABASE ----- //
     fun saveNewEntry(groceryItem: GroceryItem) {
@@ -44,8 +46,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             mediator.fetchGroceryData()
                 .collect {
-                    print("viewmodel should get this: ${it.toString()}")
                     _groceryListLiveData.postValue(it)
+                }
+        }
+    }
+
+    fun getUserConnectedShoppingListID(){
+        viewModelScope.launch {
+            mediator.getUserConnectedShoppingListID()
+                .collect {
+                    _shoppingListID.postValue(it)
                 }
         }
     }

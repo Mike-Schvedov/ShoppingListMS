@@ -21,6 +21,7 @@ import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
+import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,7 +54,9 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        //TODO first time every shopping list creation method sharedpref
+        // Save current user's connected shop list id - into the shared pref, so the firebase manager
+        // can use it to get the full list (the observer will save the data into the sharedpref)
+        homeViewModel.getUserConnectedShoppingListID()
 
         // onStart  grocery fetching
         homeViewModel.fetchGroceryData()
@@ -90,6 +93,10 @@ class HomeFragment : Fragment() {
     private fun observers() {
         homeViewModel.groceryListLiveData.observe(viewLifecycleOwner) { items: List<GroceryItem> ->
             adapter.setNewData(items)
+        }
+        homeViewModel.shoppingListID.observe(viewLifecycleOwner) { id ->
+            // Saving connected list into the sharedPref
+            requireContext().setCurrentListId(id)
         }
     }
 

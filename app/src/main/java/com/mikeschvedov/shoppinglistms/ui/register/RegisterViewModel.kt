@@ -5,16 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.mikeschvedov.shoppinglistms.data.mediator.Mediator
+import com.mikeschvedov.shoppinglistms.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val mediator: Mediator
 ): ViewModel() {
 
     // Input flows
@@ -57,5 +61,11 @@ class RegisterViewModel @Inject constructor(
 
     fun getAuthentication(): FirebaseAuth {
         return firebaseAuth
+    }
+
+    fun addUserToDatabase(user: User) {
+        viewModelScope.launch {
+            mediator.addUserToDatabase(user)
+        }
     }
 }

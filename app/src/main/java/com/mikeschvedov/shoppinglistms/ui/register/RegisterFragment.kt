@@ -10,10 +10,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentRegisterBinding
+import com.mikeschvedov.shoppinglistms.models.User
+import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -64,6 +64,18 @@ class RegisterFragment : Fragment() {
             registerViewModel.getAuthentication().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                 if (it.isSuccessful){
                     Toast.makeText(requireContext(), "Registration Complete", Toast.LENGTH_SHORT).show()
+                    val user = registerViewModel.getAuthentication().currentUser
+                    val userID = user?.uid
+                    val userEmail = user?.email
+                    // The user decided to create a new list, or join an existing one:
+                    // mock decided to create a new one:
+                    val newListID = generateNewListID(userID)
+
+                    // In order to save more data about the user (other than the uid, email and password)
+                    // we also need to create him in the database
+
+                    addUserToDatabase(userID!!,  userEmail!!, newListID)
+                    // Then we take him to the home page
                     takeUserToHomeFragment()
                 }else{
                     Toast.makeText(requireContext(), "${it.exception}", Toast.LENGTH_SHORT).show()
@@ -84,6 +96,22 @@ class RegisterFragment : Fragment() {
         binding.edittextConfirmPassword.addTextChangedListener {
             registerViewModel.setConfirmPasswordInput(it.toString())
         }
+    }
+
+    private fun generateNewListID(userID: String?): String {
+        val trimUserID = userID?.substring(0, 7)
+        return "ShoppingList-$trimUserID"
+    }
+
+    private fun addUserToDatabase(userID: String, userEmail: String, newListID: String) {
+        val user = User(userID, userEmail, newListID)
+        registerViewModel.addUserToDatabase(user)
+        // Saving the new assigned Shopping List ID into the sharedPref
+        saveAssignedList(newListID)
+    }
+
+    private fun saveAssignedList(newListID: String) {
+        requireContext().setCurrentListId(newListID)
     }
 
     private fun takeUserToHomeFragment() {

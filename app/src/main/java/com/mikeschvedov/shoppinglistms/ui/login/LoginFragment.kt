@@ -11,10 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentLoginBinding
 import com.mikeschvedov.shoppinglistms.util.setCardFocus
+import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -106,7 +106,6 @@ class LoginFragment : Fragment() {
     private fun loginIntoApp() {
         findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
