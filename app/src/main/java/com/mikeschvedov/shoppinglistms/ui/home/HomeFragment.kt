@@ -95,6 +95,7 @@ class HomeFragment : Fragment() {
             adapter.setNewData(items)
         }
         homeViewModel.shoppingListID.observe(viewLifecycleOwner) { id ->
+            println("GETTING THE CURRENT LIST ID IN HOME FRAGMENT: $id")
             // Saving connected list into the sharedPref
             requireContext().setCurrentListId(id)
         }

@@ -18,4 +18,7 @@ interface RepositoryProtocol  {
 
     suspend fun getUserConnectedShoppingListID(): Flow<String>
 
+    // ----------------------- Code ---------------------- //
+    suspend fun getAllValidInviteCodes() : Flow<List<String>>
+
 }

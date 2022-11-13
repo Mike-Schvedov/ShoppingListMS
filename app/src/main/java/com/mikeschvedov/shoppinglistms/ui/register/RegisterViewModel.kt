@@ -1,18 +1,19 @@
 package com.mikeschvedov.shoppinglistms.ui.register
 
 import android.util.Patterns
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.mikeschvedov.shoppinglistms.data.mediator.Mediator
+import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.models.User
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +29,9 @@ class RegisterViewModel @Inject constructor(
 
     private var _errorMessage = MutableStateFlow("")
     var errorMessage = _errorMessage
+
+    val inviteCodesList: LiveData<List<String>> get()= _inviteCodesList
+    private val _inviteCodesList = MutableLiveData<List<String>>()
 
     val loginState  =
         combine(_emailInput, _passwordInput, _confirmPasswordInput) { emailInput, passwordInput, confirmPasswordInput ->
@@ -66,6 +70,14 @@ class RegisterViewModel @Inject constructor(
     fun addUserToDatabase(user: User) {
         viewModelScope.launch {
             mediator.addUserToDatabase(user)
+        }
+    }
+
+    fun getAllValidInviteCodes(){
+        viewModelScope.launch {
+            mediator.getAllValidInviteCodes().collect{
+                _inviteCodesList.postValue(it)
+            }
         }
     }
 }

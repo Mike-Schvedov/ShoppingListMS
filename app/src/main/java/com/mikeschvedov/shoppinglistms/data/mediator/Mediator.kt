@@ -36,4 +36,12 @@ class Mediator @Inject constructor(
             emit(it)
         }
     }
+
+    override suspend fun  getAllValidInviteCodes(): Flow<List<String>> = flow {
+        println("Entered the mediator")
+        databaseRepository.getAllValidInviteCodes().collect{
+            println("Returning from the mediator : $it")
+            emit(it)
+        }
+    }
 }

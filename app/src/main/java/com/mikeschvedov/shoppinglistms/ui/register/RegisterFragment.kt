@@ -1,12 +1,13 @@
 package com.mikeschvedov.shoppinglistms.ui.register
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,6 +18,7 @@ import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
 
@@ -26,6 +28,8 @@ class RegisterFragment : Fragment() {
     // Binding
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
+
+    private var allInviteCodesList = listOf<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +47,16 @@ class RegisterFragment : Fragment() {
 
         setCollectors()
 
+        setObservers()
+
         return root
+    }
+
+    private fun setObservers() {
+        registerViewModel.inviteCodesList.observe(viewLifecycleOwner) { list ->
+            allInviteCodesList = list
+            println("This is the list: $allInviteCodesList")
+        }
     }
 
     private fun setCollectors() {
@@ -53,35 +66,50 @@ class RegisterFragment : Fragment() {
                 binding.registerButton.isEnabled = loginState
             }
         }
+
     }
 
     private fun setListeners() {
         // ----------------------- OnClick Listeners ----------------------- //
+        val optionsRadioGroup = binding.groupradio
+        var selectedOption = 1
+        optionsRadioGroup.setOnCheckedChangeListener { radioGroup, i ->
+            // selected button
+            val radioButton: RadioButton = radioGroup.findViewById(i)
+            if (radioButton.id == R.id.radia_id2){
+                binding.cardViewJoinlist.visibility = View.VISIBLE
+                selectedOption = 2
+            }else{
+                binding.cardViewJoinlist.visibility = View.GONE
+                selectedOption = 1
+            }
+        }
+
         binding.registerButton.setOnClickListener {
             val email = binding.edittextEmail.text.toString()
             val password = binding.edittextPassword.text.toString()
+            val inviteCode: String
+            val isValid: Boolean
 
-            registerViewModel.getAuthentication().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                if (it.isSuccessful){
-                    Toast.makeText(requireContext(), "Registration Complete", Toast.LENGTH_SHORT).show()
-                    val user = registerViewModel.getAuthentication().currentUser
-                    val userID = user?.uid
-                    val userEmail = user?.email
-                    // The user decided to create a new list, or join an existing one:
-                    // mock decided to create a new one:
-                    val newListID = generateNewListID(userID)
-
-                    // In order to save more data about the user (other than the uid, email and password)
-                    // we also need to create him in the database
-
-                    addUserToDatabase(userID!!,  userEmail!!, newListID)
-                    // Then we take him to the home page
-                    takeUserToHomeFragment()
+            if (selectedOption == 2){
+                inviteCode = binding.edittextConfirmJoinlist.text.toString()
+                if (inviteCode.isNotEmpty()){
+                    isValid = validateInviteCode(inviteCode)
+                    if (isValid){
+                        performRegistration(email, password, inviteCode)
+                    }else{
+                        println("CODE IS INVALID")
+                        Toast.makeText(requireContext(), "Invalid invite code", Toast.LENGTH_SHORT).show()
+                    }
                 }else{
-                    Toast.makeText(requireContext(), "${it.exception}", Toast.LENGTH_SHORT).show()
+                    println("CODE IS EMPTY")
+                    Toast.makeText(requireContext(), "Please enter the invite code", Toast.LENGTH_SHORT).show()
                 }
+            }else{ // selected option is 1
+                performRegistration(email, password, null)
             }
         }
+
         binding.loginGotoLink.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_LoginFragment)
         }
@@ -98,23 +126,62 @@ class RegisterFragment : Fragment() {
         }
     }
 
+    private fun performRegistration(email: String, password: String, inviteCode: String?) {
+        registerViewModel.getAuthentication().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+            if (it.isSuccessful){
+                Toast.makeText(requireContext(), "Registration Complete", Toast.LENGTH_SHORT).show()
+                val user = registerViewModel.getAuthentication().currentUser
+                val userID = user?.uid
+                val userEmail = user?.email
+
+                val shoppingListId: String
+               if (inviteCode == null){  // The user decided to create a new list:
+                   shoppingListId = generateNewListID(userID)
+               }else{ // The user provided a valid invite code:
+                   shoppingListId = inviteCode
+               }
+                // In order to save more data about the user (other than the uid, email and password)
+                // we also need to create him in the database
+                addUserToDatabase(userID!!,  userEmail!!, shoppingListId)
+                // Then we take him to the home page
+                takeUserToHomeFragment()
+            }else{
+                Toast.makeText(requireContext(), "${it.exception}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun validateInviteCode(inviteCode: String): Boolean {
+        // if the inviteCode exists in the list return true
+        println(allInviteCodesList.toString())
+        val contains = allInviteCodesList.contains(inviteCode)
+        println(contains)
+        return contains
+    }
+
     private fun generateNewListID(userID: String?): String {
         val trimUserID = userID?.substring(0, 7)
         return "ShoppingList-$trimUserID"
     }
 
-    private fun addUserToDatabase(userID: String, userEmail: String, newListID: String) {
-        val user = User(userID, userEmail, newListID)
+    private fun addUserToDatabase(userID: String, userEmail: String, listID: String) {
+        val user = User(userID, userEmail, listID)
         registerViewModel.addUserToDatabase(user)
         // Saving the new assigned Shopping List ID into the sharedPref
-        saveAssignedList(newListID)
+        saveAssignedList(listID)
     }
 
     private fun saveAssignedList(newListID: String) {
+        println("SETTINGS THIS ID INTO SERDPREFF: $newListID")
         requireContext().setCurrentListId(newListID)
     }
 
     private fun takeUserToHomeFragment() {
         findNavController().navigate(R.id.action_registerFragment_to_HomeFragment)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerViewModel.getAllValidInviteCodes()
     }
 }

@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.mikeschvedov.shoppinglistms.interfaces.OnInviteCodeChangedListener
 import com.mikeschvedov.shoppinglistms.interfaces.OnGroceryItemChangedListener
 import com.mikeschvedov.shoppinglistms.interfaces.OnStringChangedListener
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
@@ -15,17 +16,22 @@ import javax.inject.Inject
 
 
 class FirebaseManager @Inject constructor(
-    database: FirebaseDatabase,
-    firebaseAuth: FirebaseAuth,
-     context: Context
+    private  val database: FirebaseDatabase,
+    private val firebaseAuth: FirebaseAuth,
+     private val context: Context
 ) {
 
     private val databaseReference = database.reference
-    private val user = firebaseAuth.currentUser!!
+    private val currentUserUID = getCurrentUserUID()
+
+    private fun getCurrentUserUID(): String {
+        val user = firebaseAuth.currentUser
+        val uid = user?.uid
+        return uid ?: ""
+    }
 
     private val shoppingRoot = "allShoppingLists"
     private val usersRoot = "users"
-    private val shoppingListID = context.getCurrentListId()
 
     // Create new user
     fun createNewUser(user: User) {
@@ -39,9 +45,10 @@ class FirebaseManager @Inject constructor(
     }
 
     fun getUserConnectedShoppingListID(callback: OnStringChangedListener){
-        databaseReference.child(usersRoot).child(user.uid).addValueEventListener(object : ValueEventListener {
+        databaseReference.child(usersRoot).child(currentUserUID).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val id = dataSnapshot.child("shoppinglist").value.toString()
+                val id = dataSnapshot.child("shoppinglistid").value.toString()
+                println("RETURNING THIS ID FROM FIREBASE: $id")
                 callback.onChange(id)
             }
 
@@ -51,8 +58,23 @@ class FirebaseManager @Inject constructor(
         })
     }
 
+    fun getAllValidInviteCodes(callback: OnInviteCodeChangedListener){
+        databaseReference.child(usersRoot).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val id = dataSnapshot.child("shoppinglistid").value.toString()
+             //TODO simply get the ids and chop their first 7 characters
+                callback.onChange(listOf("code1", "code2", "code3"))
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                println("There was some error reading the data")
+            }
+        })
+    }
+
+
     fun addNewEntry(entry: GroceryItem) {
-        databaseReference.child(shoppingRoot).child(shoppingListID).child(entry.id).setValue(entry)
+        databaseReference.child(shoppingRoot).child(context.getCurrentListId()).child(entry.id).setValue(entry)
             .addOnSuccessListener {
                 println("New Entry Added")
             }
@@ -62,7 +84,7 @@ class FirebaseManager @Inject constructor(
     }
 
     fun updateItemIsMarked(item: GroceryItem, isMarked: Boolean) {
-        databaseReference.child(shoppingRoot).child(shoppingListID).child(item.id).child("marked").setValue(isMarked)
+        databaseReference.child(shoppingRoot).child(context.getCurrentListId()).child(item.id).child("marked").setValue(isMarked)
             .addOnSuccessListener {
                 println("Data was updated")
             }
@@ -73,13 +95,13 @@ class FirebaseManager @Inject constructor(
 
     fun readAllItemsFromFirebase(callback: OnGroceryItemChangedListener) {
         var items: List<GroceryItem>
-        databaseReference.child(shoppingRoot).child(shoppingListID).addValueEventListener(object : ValueEventListener {
+        databaseReference.child(shoppingRoot).child(context.getCurrentListId()).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 items = dataSnapshot.children.mapNotNull { it.getValue(GroceryItem::class.java) }.toList()
                 items.forEach {
                     println("items: ${it.name} | ${it.amount} | ${it.marked}")
                 }
-                println("FETCHING LIST BASED ON $shoppingListID shoppinglist id")
+                println("FETCHING LIST BASED ON ${context.getCurrentListId()} shoppinglist id")
                 callback.onChange(items)
             }
 

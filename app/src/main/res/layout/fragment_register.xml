@@ -109,7 +109,7 @@
         android:layout_marginHorizontal="32dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/groupradio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -140,23 +140,85 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         app:constraint_referenced_ids="cardView_email,cardView_password, cardView_confirm_password"
         app:flow_verticalGap="32dp"
         app:flow_wrapMode="aligned"
-        app:layout_constraintBottom_toTopOf="@id/guideline4"
+        app:layout_constraintBottom_toTopOf="@id/groupradio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
+    <RadioGroup
+        android:id="@+id/groupradio"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_width="0dp"
+        android:layout_marginTop="30dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintTop_toBottomOf="@id/flow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:checkedButton="@id/radia_id1"
+    >
+
+        <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radia_id1"
+            android:fontFamily="@font/baloo"
+            android:text=" Create New Shopping List"
+            android:textColor="@color/grey"
+            android:textSize="20sp"/>
+
+        <RadioButton
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/radia_id2"
+            android:fontFamily="@font/baloo"
+            android:textColor="@color/grey"
+            android:text=" Join Existing Shopping List"
+            android:textSize="20sp"/>
+    </RadioGroup>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView_joinlist"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/register_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/groupradio">
+
+        <EditText
+            android:id="@+id/edittext_confirm_joinlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="password"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_baseline_data_saver_on_24"
+            android:drawablePadding="16dp"
+            android:drawableTint="@color/orange_medium"
+            android:elevation="20dp"
+            android:focusable="true"
+            android:fontFamily="@font/baloo"
+            android:hint="Enter invite code"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textColor="@color/orange_weak"
+            android:textColorHint="@color/light_gray"
+            android:textSize="16sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -164,7 +226,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="64dp"
-        android:layout_marginTop="64dp"
         android:autofillHints="password"
         android:background="@drawable/login_btn_selector"
         android:drawablePadding="16dp"
@@ -179,7 +240,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline4"
+        app:layout_constraintTop_toBottomOf="@id/cardView_joinlist"
+    android:layout_marginTop="30dp"
         android:focusable="true">
 
     </androidx.appcompat.widget.AppCompatButton>

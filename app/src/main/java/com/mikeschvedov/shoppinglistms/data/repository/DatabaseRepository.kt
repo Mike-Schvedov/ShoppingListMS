@@ -1,6 +1,7 @@
 package com.mikeschvedov.shoppinglistms.data.repository
 
 import com.mikeschvedov.shoppinglistms.data.database.remote.FirebaseManager
+import com.mikeschvedov.shoppinglistms.interfaces.OnInviteCodeChangedListener
 import com.mikeschvedov.shoppinglistms.interfaces.OnGroceryItemChangedListener
 import com.mikeschvedov.shoppinglistms.interfaces.OnStringChangedListener
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
@@ -39,6 +40,17 @@ class DatabaseRepository @Inject constructor(
         var callback  : OnStringChangedListener?
         callback = OnStringChangedListener { id -> trySend(id) }
         firebaseManager.getUserConnectedShoppingListID (callback)
+        awaitClose{ callback = null}
+    }
+
+    // ----------------------- Code --------------------- //
+    override suspend fun getAllValidInviteCodes() : Flow<List<String>> = callbackFlow {
+        println("Entered the repository")
+        var callback  : OnInviteCodeChangedListener?
+        callback = OnInviteCodeChangedListener { list ->
+            println("Returning from the repository : $list")
+            trySend(list) }
+        firebaseManager.getAllValidInviteCodes (callback)
         awaitClose{ callback = null}
     }
 }
