@@ -40,6 +40,9 @@
         <entry key="app/src/main/res/drawable/custom_dialog_bg.xml" value="0.1045" />
         <entry key="app/src/main/res/drawable/edittext_bg_focused.xml" value="0.1835" />
         <entry key="app/src/main/res/drawable/edittext_selector.xml" value="0.1045" />
+        <entry key="app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.149" />
+        <entry key="app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.149" />
+        <entry key="app/src/main/res/drawable/ic_baseline_more_vert_24.xml" value="0.149" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/custom_dialog.xml" value="0.23443223443223443" />

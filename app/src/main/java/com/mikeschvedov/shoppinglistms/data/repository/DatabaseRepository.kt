@@ -21,6 +21,7 @@ class DatabaseRepository @Inject constructor(
     }
 
     override suspend  fun fetchGroceryData(): Flow<List<GroceryItem>> = callbackFlow {
+        println("fetchGroceryData() - Repository")
         var callback  : OnGroceryItemChangedListener?
         callback = OnGroceryItemChangedListener { items -> trySend(items) }
         firebaseManager.readAllItemsFromFirebase (callback)
@@ -37,6 +38,7 @@ class DatabaseRepository @Inject constructor(
     }
 
     override suspend fun getUserConnectedShoppingListID() : Flow<String> = callbackFlow {
+        println("getUserConnectedShoppingListID() - Repository")
         var callback  : OnStringChangedListener?
         callback = OnStringChangedListener { id -> trySend(id) }
         firebaseManager.getUserConnectedShoppingListID (callback)

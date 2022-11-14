@@ -21,6 +21,7 @@ import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
+import com.mikeschvedov.shoppinglistms.util.getCurrentListId
 import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,9 +59,6 @@ class HomeFragment : Fragment() {
         // can use it to get the full list (the observer will save the data into the sharedpref)
         homeViewModel.getUserConnectedShoppingListID()
 
-        // onStart  grocery fetching
-        homeViewModel.fetchGroceryData()
-
         observers()
 
         binding.textviewtoken.text = homeViewModel.getCurrentUser()?.uid
@@ -95,9 +93,11 @@ class HomeFragment : Fragment() {
             adapter.setNewData(items)
         }
         homeViewModel.shoppingListID.observe(viewLifecycleOwner) { id ->
-            println("GETTING THE CURRENT LIST ID IN HOME FRAGMENT: $id")
+            println("OBSERVING THE CURRENT LIST ID IN HOME FRAGMENT: $id")
             // Saving connected list into the sharedPref
             requireContext().setCurrentListId(id)
+            println("now the list id in sharedpref is: ${requireContext().getCurrentListId()}")
+            homeViewModel.fetchGroceryData()
         }
     }
 

@@ -23,6 +23,7 @@ class FirebaseManager @Inject constructor(
 
     private val databaseReference = database.reference
     private val currentUserUID = getCurrentUserUID()
+    private val currentListId get() = context.getCurrentListId()
 
     private fun getCurrentUserUID(): String {
         val user = firebaseAuth.currentUser
@@ -45,6 +46,7 @@ class FirebaseManager @Inject constructor(
     }
 
     fun getUserConnectedShoppingListID(callback: OnStringChangedListener){
+        println("getUserConnectedShoppingListID() - Firebase")
         databaseReference.child(usersRoot).child(currentUserUID).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val id = dataSnapshot.child("shoppinglistid").value.toString()
@@ -94,8 +96,10 @@ class FirebaseManager @Inject constructor(
     }
 
     fun readAllItemsFromFirebase(callback: OnGroceryItemChangedListener) {
+        println("fetchGroceryData() - Firebase")
         var items: List<GroceryItem>
-        databaseReference.child(shoppingRoot).child(context.getCurrentListId()).addValueEventListener(object : ValueEventListener {
+        val id = currentListId
+        databaseReference.child(shoppingRoot).child(currentListId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 items = dataSnapshot.children.mapNotNull { it.getValue(GroceryItem::class.java) }.toList()
                 items.forEach {

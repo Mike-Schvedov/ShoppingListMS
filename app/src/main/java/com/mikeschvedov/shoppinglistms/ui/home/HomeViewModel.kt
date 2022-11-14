@@ -1,5 +1,6 @@
 package com.mikeschvedov.shoppinglistms.ui.home
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +10,11 @@ import com.mikeschvedov.shoppinglistms.data.mediator.MediatorProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
 import com.mikeschvedov.shoppinglistms.util.SingleEvent
+import com.mikeschvedov.shoppinglistms.util.getCurrentListId
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,6 +48,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fetchGroceryData(){
+        println("fetchGroceryData() - HomeViewModel")
         viewModelScope.launch {
             mediator.fetchGroceryData()
                 .collect {
@@ -52,9 +58,11 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getUserConnectedShoppingListID(){
-        viewModelScope.launch {
+        println("getUserConnectedShoppingListID() - HomeViewModel")
+        viewModelScope.launch(Dispatchers.IO) {
             mediator.getUserConnectedShoppingListID()
                 .collect {
+                    println("Returning List ID in HomeViewModel")
                     _shoppingListID.postValue(it)
                 }
         }

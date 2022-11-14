@@ -21,6 +21,7 @@ class Mediator @Inject constructor(
     }
 
     override suspend fun fetchGroceryData(): Flow<List<GroceryItem>> = flow {
+        println("fetchGroceryData() - Mediator")
         databaseRepository.fetchGroceryData().collect{
             emit(it)
         }
@@ -32,6 +33,7 @@ class Mediator @Inject constructor(
     }
 
     override suspend fun getUserConnectedShoppingListID(): Flow<String> = flow{
+        println("getUserConnectedShoppingListID() - Mediator")
         databaseRepository.getUserConnectedShoppingListID().collect{
             emit(it)
         }
