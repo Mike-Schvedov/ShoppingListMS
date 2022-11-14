@@ -25,14 +25,16 @@ class FirebaseManager @Inject constructor(
     private val currentUserUID = getCurrentUserUID()
     private val currentListId get() = context.getCurrentListId()
 
+    private val shoppingRoot = "allShoppingLists"
+    private val usersRoot = "users"
+
+    var clicked: Boolean = false
+
     private fun getCurrentUserUID(): String {
         val user = firebaseAuth.currentUser
         val uid = user?.uid
         return uid ?: ""
     }
-
-    private val shoppingRoot = "allShoppingLists"
-    private val usersRoot = "users"
 
     // Create new user
     fun createNewUser(user: User) {
@@ -76,7 +78,7 @@ class FirebaseManager @Inject constructor(
 
 
     fun addNewEntry(entry: GroceryItem) {
-        databaseReference.child(shoppingRoot).child(context.getCurrentListId()).child(entry.id).setValue(entry)
+        databaseReference.child(shoppingRoot).child(currentListId).child(entry.id).setValue(entry)
             .addOnSuccessListener {
                 println("New Entry Added")
             }
@@ -86,7 +88,7 @@ class FirebaseManager @Inject constructor(
     }
 
     fun updateItemIsMarked(item: GroceryItem, isMarked: Boolean) {
-        databaseReference.child(shoppingRoot).child(context.getCurrentListId()).child(item.id).child("marked").setValue(isMarked)
+        databaseReference.child(shoppingRoot).child(currentListId).child(item.id).child("marked").setValue(isMarked)
             .addOnSuccessListener {
                 println("Data was updated")
             }
@@ -115,6 +117,34 @@ class FirebaseManager @Inject constructor(
         })
     }
 
+    fun deleteAll(){
+        databaseReference.child(shoppingRoot).child(currentListId).removeValue()
+    }
 
+    fun deleteMarkedItems(){
+        // We need this boolean so the onDataChange will not delete entries by itself
+        clicked = true
+
+        val currentListReference = databaseReference.child(shoppingRoot).child(currentListId)
+        currentListReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists() && clicked) {
+                    dataSnapshot.children.forEach {
+                        val itemsKey = it.key                                                        // For each child of our reference(root database) we get the item's (aka "it") key.
+                        val itemsBought: Boolean = it.child("marked").value as Boolean          // We get the value of "bought", a child of the item ("it").
+
+                        if (itemsBought) {                                                           // If the current "bought" value is true (checked) then remove the item (according to the key - "itemsKey")
+                            if (itemsKey != null) {
+                                currentListReference.child(itemsKey).removeValue()
+                            }
+                        }
+                    }
+                    // Setting back to false, otherwise it will automatically delete entries
+                    clicked = false
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
 
 }

@@ -14,6 +14,10 @@ interface MediatorProtocol {
 
     suspend fun fetchGroceryData() : Flow<List<GroceryItem>>
 
+    suspend fun deleteAll()
+
+    suspend fun deleteMarkedItems()
+
     // ---------------------- Users ---------------------- //
     fun addUserToDatabase(user: User)
 

@@ -13,6 +13,10 @@ interface RepositoryProtocol  {
 
     fun toggleItemMarked(item: GroceryItem, isMarked: Boolean)
 
+    suspend fun deleteAll()
+
+    suspend fun deleteMarkedItems()
+
     // ---------------------- Users ---------------------- //
     fun addUserToDatabase(user: User)
 

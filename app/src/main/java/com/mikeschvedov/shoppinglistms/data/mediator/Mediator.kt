@@ -27,6 +27,14 @@ class Mediator @Inject constructor(
         }
     }
 
+    override suspend fun deleteAll(){
+        databaseRepository.deleteAll()
+    }
+
+    override suspend fun deleteMarkedItems(){
+        databaseRepository.deleteMarkedItems()
+    }
+
     // ---------------------- Users ---------------------- //
      override fun addUserToDatabase(user: User){
         databaseRepository.addUserToDatabase(user)

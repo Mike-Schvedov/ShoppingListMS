@@ -32,6 +32,14 @@ class DatabaseRepository @Inject constructor(
         firebaseManager.updateItemIsMarked(item, isMarked)
     }
 
+    override suspend fun deleteAll() {
+        firebaseManager.deleteAll()
+    }
+
+    override suspend fun deleteMarkedItems() {
+        firebaseManager.deleteMarkedItems()
+    }
+
     // ---------------------- Users ---------------------- //
     override fun addUserToDatabase(user: User){
         firebaseManager.createNewUser(user)

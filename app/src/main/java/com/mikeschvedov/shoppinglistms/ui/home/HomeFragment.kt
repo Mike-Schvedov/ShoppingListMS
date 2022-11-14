@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
@@ -61,8 +62,6 @@ class HomeFragment : Fragment() {
 
         observers()
 
-        binding.textviewtoken.text = homeViewModel.getCurrentUser()?.uid
-
         binding.addNewItemBtn.setOnClickListener {
             openAddEntryDialog()
         }
@@ -82,10 +81,18 @@ class HomeFragment : Fragment() {
                     openSettingsMenu()
                     true
                 }
+                R.id.options_logout -> {
+                    logoutFromApp()
+                    true
+                }
                 else -> false
             }
         }
         return root
+    }
+
+    private fun logoutFromApp() {
+
     }
 
     private fun observers() {
@@ -101,8 +108,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    fun openSettingsMenu() {
-        TODO("Not yet implemented")
+    private fun openSettingsMenu() {
+        findNavController().navigate(R.id.action_HomeFragment_to_settingsFragment)
     }
 
     private fun openAddEntryDialog(){

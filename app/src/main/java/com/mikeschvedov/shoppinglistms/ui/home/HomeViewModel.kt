@@ -75,11 +75,15 @@ class HomeViewModel @Inject constructor(
     }
 
     fun deleteAll() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            mediator.deleteAll()
+        }
     }
 
     fun deleteMarkedItems() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            mediator.deleteMarkedItems()
+        }
     }
 
     fun getCurrentUser(): FirebaseUser? {
