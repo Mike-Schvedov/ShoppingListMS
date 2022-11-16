@@ -1,13 +1,9 @@
 package com.mikeschvedov.shoppinglistms.util
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.material.card.MaterialCardView
 import com.mikeschvedov.shoppinglistms.R
-import com.mikeschvedov.shoppinglistms.data.network.models.NotificationData
-import com.mikeschvedov.shoppinglistms.data.network.models.PushNotification
 
 
 fun Context.setCardFocus(card: MaterialCardView, hasFocus: Boolean){

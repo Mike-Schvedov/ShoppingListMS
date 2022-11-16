@@ -3,6 +3,7 @@ package com.mikeschvedov.shoppinglistms.data.mediator
 import com.mikeschvedov.shoppinglistms.data.repository.RepositoryProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.models.User
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class Mediator @Inject constructor(
     }
 
     override suspend fun fetchGroceryData(): Flow<List<GroceryItem>> = flow {
-        println("fetchGroceryData() - Mediator")
+        LoggerService.info("fetchGroceryData() - Mediator")
         databaseRepository.fetchGroceryData().collect{
             emit(it)
         }

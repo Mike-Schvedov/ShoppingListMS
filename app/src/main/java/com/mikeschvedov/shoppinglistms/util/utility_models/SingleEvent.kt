@@ -1,4 +1,4 @@
-package com.mikeschvedov.shoppinglistms.util
+package com.mikeschvedov.shoppinglistms.util.utility_models
 
 /**
  * Used as a wrapper for data that is exposed that represents an event.

@@ -11,10 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.firestore.util.Logger
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentLoginBinding
+import com.mikeschvedov.shoppinglistms.util.getCurrentListId
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService.logger
 import com.mikeschvedov.shoppinglistms.util.setCardFocus
-import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,6 +42,15 @@ class LoginFragment : Fragment() {
         // ----------------------- Binding ----------------------- //
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        // Making sure no user is signed in
+        loginViewModel.getAuthentication().signOut()
+        println("========================================================")
+        LoggerService.debug("This is shared pref at login fragment on create: ${requireContext().getCurrentListId()}")
+        val user = loginViewModel.getAuthentication().currentUser
+        LoggerService.debug("This the user at login fragment on create: ${user?.email}")
+        println("========================================================")
+
 
         setListeners()
         setCollectors()
@@ -104,7 +116,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginIntoApp() {
-        findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        findNavController().navigate(R.id.action_LoginFragment_to_HomeFragment)
     }
 
     override fun onDestroyView() {

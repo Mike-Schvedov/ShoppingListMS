@@ -12,8 +12,8 @@ import com.mikeschvedov.shoppinglistms.interfaces.OnStringChangedListener
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.models.User
 import com.mikeschvedov.shoppinglistms.util.getCurrentListId
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import javax.inject.Inject
-
 
 class FirebaseManager @Inject constructor(
     private  val database: FirebaseDatabase,
@@ -22,7 +22,6 @@ class FirebaseManager @Inject constructor(
 ) {
 
     private val databaseReference = database.reference
-    private val currentUserUID = getCurrentUserUID()
     private val currentListId get() = context.getCurrentListId()
 
     private val shoppingRoot = "allShoppingLists"
@@ -40,24 +39,26 @@ class FirebaseManager @Inject constructor(
     fun createNewUser(user: User) {
         databaseReference.child(usersRoot).child(user.id).setValue(user)
             .addOnSuccessListener {
-                println("New User Created")
+                LoggerService.info("New User Created")
             }
             .addOnFailureListener {
-                println("Failed to Create New User")
+                LoggerService.error("\uD83D\uDCD5Failed to Create New User")
             }
     }
 
     fun getUserConnectedShoppingListID(callback: OnStringChangedListener){
         println("getUserConnectedShoppingListID() - Firebase")
-        databaseReference.child(usersRoot).child(currentUserUID).addValueEventListener(object : ValueEventListener {
+        val currentUserID = getCurrentUserUID() //This has to be here!! otherwise it gets the wrong id
+        LoggerService.debug(" user id = $currentUserID")
+        databaseReference.child(usersRoot).child(currentUserID).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val id = dataSnapshot.child("shoppinglistid").value.toString()
-                println("RETURNING THIS ID FROM FIREBASE: $id")
+                LoggerService.debug("\uD83D\uDCD7RETURNING THIS ID FROM FIREBASE: $id based on this user: ${getCurrentUserUID()}")
                 callback.onChange(id)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                println("There was some error reading the data")
+                LoggerService.error("\uD83D\uDCD5There was some error reading the data")
             }
         })
     }
@@ -71,7 +72,7 @@ class FirebaseManager @Inject constructor(
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                println("There was some error reading the data")
+                LoggerService.error("There was some error reading the data")
             }
         })
     }
@@ -80,39 +81,35 @@ class FirebaseManager @Inject constructor(
     fun addNewEntry(entry: GroceryItem) {
         databaseReference.child(shoppingRoot).child(currentListId).child(entry.id).setValue(entry)
             .addOnSuccessListener {
-                println("New Entry Added")
+                LoggerService.info("New Entry Added")
             }
             .addOnFailureListener {
-                println("Failed to Add New Entry")
+                LoggerService.error("Failed to Add New Entry")
             }
     }
 
     fun updateItemIsMarked(item: GroceryItem, isMarked: Boolean) {
         databaseReference.child(shoppingRoot).child(currentListId).child(item.id).child("marked").setValue(isMarked)
             .addOnSuccessListener {
-                println("Data was updated")
+                LoggerService.info("Data was updated")
             }
             .addOnFailureListener {
-                println("Failed to update data")
+                LoggerService.error("Failed to update data")
             }
     }
 
     fun readAllItemsFromFirebase(callback: OnGroceryItemChangedListener) {
-        println("fetchGroceryData() - Firebase")
+        LoggerService.info("fetchGroceryData() - Firebase")
         var items: List<GroceryItem>
-        val id = currentListId
         databaseReference.child(shoppingRoot).child(currentListId).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 items = dataSnapshot.children.mapNotNull { it.getValue(GroceryItem::class.java) }.toList()
-                items.forEach {
-                    println("items: ${it.name} | ${it.amount} | ${it.marked}")
-                }
-                println("FETCHING LIST BASED ON ${context.getCurrentListId()} shoppinglist id")
+                LoggerService.debug("fetchGroceryData() - FETCHING LIST BASED ON ${currentListId} shoppinglist id")
                 callback.onChange(items)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                println("There was some error reading the data")
+                LoggerService.error("There was some error reading the data")
             }
         })
     }

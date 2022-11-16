@@ -17,14 +17,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
 import com.mikeschvedov.shoppinglistms.util.getCurrentListId
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import com.mikeschvedov.shoppinglistms.util.setCurrentListId
-import dagger.hilt.EntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,6 +55,11 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
+        println("========================================================")
+        LoggerService.debug("This is shared pref at home fragment on create: ${requireContext().getCurrentListId()}")
+        val user = homeViewModel.getCurrentUser()
+        LoggerService.debug("This the user at home fragment on create: ${user?.email}")
+        println("========================================================")
         // Save current user's connected shop list id - into the shared pref, so the firebase manager
         // can use it to get the full list (the observer will save the data into the sharedpref)
         homeViewModel.getUserConnectedShoppingListID()
@@ -92,7 +96,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun logoutFromApp() {
-
+        findNavController().navigate(R.id.action_HomeFragment_to_LoginFragment)
+        homeViewModel.signOutUser()
     }
 
     private fun observers() {
@@ -100,10 +105,10 @@ class HomeFragment : Fragment() {
             adapter.setNewData(items)
         }
         homeViewModel.shoppingListID.observe(viewLifecycleOwner) { id ->
-            println("OBSERVING THE CURRENT LIST ID IN HOME FRAGMENT: $id")
+            LoggerService.debug("OBSERVING THE CURRENT LIST ID IN HOME FRAGMENT: $id")
             // Saving connected list into the sharedPref
             requireContext().setCurrentListId(id)
-            println("now the list id in sharedpref is: ${requireContext().getCurrentListId()}")
+            LoggerService.debug("This is shared pref at home fragment after getting the id form database and saving in sharedpref : ${requireContext().getCurrentListId()}")
             homeViewModel.fetchGroceryData()
         }
     }
@@ -178,6 +183,12 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        homeViewModel.signOutUser()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        homeViewModel.signOutUser()
     }
 }
 

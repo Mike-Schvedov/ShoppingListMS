@@ -6,6 +6,7 @@ import com.mikeschvedov.shoppinglistms.interfaces.OnGroceryItemChangedListener
 import com.mikeschvedov.shoppinglistms.interfaces.OnStringChangedListener
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.models.User
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class DatabaseRepository @Inject constructor(
     }
 
     override suspend  fun fetchGroceryData(): Flow<List<GroceryItem>> = callbackFlow {
-        println("fetchGroceryData() - Repository")
+        LoggerService.info("fetchGroceryData() - Repository")
         var callback  : OnGroceryItemChangedListener?
         callback = OnGroceryItemChangedListener { items -> trySend(items) }
         firebaseManager.readAllItemsFromFirebase (callback)

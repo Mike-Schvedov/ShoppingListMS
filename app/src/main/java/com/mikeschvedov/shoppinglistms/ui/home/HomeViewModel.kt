@@ -1,27 +1,26 @@
 package com.mikeschvedov.shoppinglistms.ui.home
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.mikeschvedov.shoppinglistms.data.mediator.MediatorProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
-import com.mikeschvedov.shoppinglistms.util.SingleEvent
-import com.mikeschvedov.shoppinglistms.util.getCurrentListId
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
+import com.mikeschvedov.shoppinglistms.util.utility_models.SingleEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val mediator: MediatorProtocol,
-    private val currentUser: FirebaseUser?
+    private val currentUser: FirebaseUser?,
+    private val auth: FirebaseAuth
     ): ViewModel() {
 
     private val adapter = GroceryListAdapter() { itemClicked ->
@@ -48,7 +47,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fetchGroceryData(){
-        println("fetchGroceryData() - HomeViewModel")
+        LoggerService.info("fetchGroceryData() - HomeViewModel")
         viewModelScope.launch {
             mediator.fetchGroceryData()
                 .collect {
@@ -92,6 +91,10 @@ class HomeViewModel @Inject constructor(
 
     fun getAdapter(): GroceryListAdapter {
         return adapter
+    }
+
+    fun signOutUser(){
+        auth.signOut()
     }
 
 

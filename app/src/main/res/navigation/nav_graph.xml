@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_login">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            android:id="@+id/action_LoginFragment_to_HomeFragment"
             app:destination="@id/HomeFragment" />
         <action
             android:id="@+id/action_LoginFragment_to_registerFragment"
@@ -25,7 +25,7 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            android:id="@+id/action_HomeFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
         <action
             android:id="@+id/action_HomeFragment_to_settingsFragment"
