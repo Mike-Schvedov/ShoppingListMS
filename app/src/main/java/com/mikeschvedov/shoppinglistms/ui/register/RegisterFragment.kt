@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentRegisterBinding
 import com.mikeschvedov.shoppinglistms.models.User
+import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -92,20 +93,23 @@ class RegisterFragment : Fragment() {
             val isValid: Boolean
 
             if (selectedOption == 2){
+                LoggerService.debug("Option 2 was selected, join another list")
                 inviteCode = binding.edittextConfirmJoinlist.text.toString()
                 if (inviteCode.isNotEmpty()){
                     isValid = validateInviteCode(inviteCode)
                     if (isValid){
+                        LoggerService.info("Invite Code is Valid")
                         performRegistration(email, password, inviteCode)
                     }else{
-                        println("CODE IS INVALID")
+                        LoggerService.info("Invite Code is Invalid")
                         Toast.makeText(requireContext(), "Invalid invite code", Toast.LENGTH_SHORT).show()
                     }
                 }else{
-                    println("CODE IS EMPTY")
+                    LoggerService.info("Invite Code is Empty")
                     Toast.makeText(requireContext(), "Please enter the invite code", Toast.LENGTH_SHORT).show()
                 }
             }else{ // selected option is 1
+                LoggerService.debug("Option 1 was selected, create a new")
                 performRegistration(email, password, null)
             }
         }
@@ -152,8 +156,9 @@ class RegisterFragment : Fragment() {
     }
 
     private fun validateInviteCode(inviteCode: String): Boolean {
+        LoggerService.debug("Validating inviteCode: $inviteCode")
         // if the inviteCode exists in the list return true
-        println(allInviteCodesList.toString())
+        LoggerService.debug("These are the valid invite codes:$allInviteCodesList")
         val contains = allInviteCodesList.contains(inviteCode)
         println(contains)
         return contains
@@ -182,6 +187,7 @@ class RegisterFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        LoggerService.debug("Getting all valide invite codes")
         registerViewModel.getAllValidInviteCodes()
     }
 }

@@ -14,4 +14,4 @@ class App : Application() {
         LoggerService.info("========== THE APPLICATION HAS STARTED =========")
         LoggerService.info("================================================")
     }
-}
+}//ShoppingList-fSaWbAe join to this.

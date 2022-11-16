@@ -42,7 +42,7 @@ class FirebaseManager @Inject constructor(
                 LoggerService.info("New User Created")
             }
             .addOnFailureListener {
-                LoggerService.error("\uD83D\uDCD5Failed to Create New User")
+                LoggerService.error("Failed to Create New User")
             }
     }
 
@@ -53,12 +53,12 @@ class FirebaseManager @Inject constructor(
         databaseReference.child(usersRoot).child(currentUserID).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val id = dataSnapshot.child("shoppinglistid").value.toString()
-                LoggerService.debug("\uD83D\uDCD7RETURNING THIS ID FROM FIREBASE: $id based on this user: ${getCurrentUserUID()}")
+                LoggerService.debug("RETURNING THIS ID FROM FIREBASE: $id based on this user: ${getCurrentUserUID()}")
                 callback.onChange(id)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                LoggerService.error("\uD83D\uDCD5There was some error reading the data")
+                LoggerService.error("There was some error reading the data")
             }
         })
     }
@@ -67,8 +67,17 @@ class FirebaseManager @Inject constructor(
         databaseReference.child(usersRoot).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val id = dataSnapshot.child("shoppinglistid").value.toString()
-             //TODO simply get the ids and chop their first 7 characters
-                callback.onChange(listOf("code1", "code2", "code3"))
+                //TODO simply get the ids and chop their first 7 characters
+                val allFullIDs = dataSnapshot.children.mapNotNull { it.key }.toList()
+                allFullIDs.forEach{
+                    println("These are all the existing id:$it")
+                }
+                val afterMapping = allFullIDs.map { "ShoppingList-"+ it.substring(0,7) }
+                afterMapping.forEach {
+                    println("These are all the existing id after mapping:$it")
+
+                }
+                callback.onChange(afterMapping)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -127,10 +136,10 @@ class FirebaseManager @Inject constructor(
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists() && clicked) {
                     dataSnapshot.children.forEach {
-                        val itemsKey = it.key                                                        // For each child of our reference(root database) we get the item's (aka "it") key.
-                        val itemsBought: Boolean = it.child("marked").value as Boolean          // We get the value of "bought", a child of the item ("it").
+                        val itemsKey = it.key
+                        val itemsBought: Boolean = it.child("marked").value as Boolean
 
-                        if (itemsBought) {                                                           // If the current "bought" value is true (checked) then remove the item (according to the key - "itemsKey")
+                        if (itemsBought) {
                             if (itemsKey != null) {
                                 currentListReference.child(itemsKey).removeValue()
                             }
