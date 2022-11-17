@@ -75,7 +75,6 @@ class FirebaseManager @Inject constructor(
                 val afterMapping = allFullIDs.map { "ShoppingList-"+ it.substring(0,7) }
                 afterMapping.forEach {
                     println("These are all the existing id after mapping:$it")
-
                 }
                 callback.onChange(afterMapping)
             }

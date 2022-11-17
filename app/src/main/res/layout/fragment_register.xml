@@ -209,7 +209,7 @@
             android:focusable="true"
             android:fontFamily="@font/baloo"
             android:hint="Enter invite code"
-            android:inputType="textPassword"
+            android:inputType="text"
             android:padding="12dp"
             android:textColor="@color/orange_weak"
             android:textColorHint="@color/light_gray"

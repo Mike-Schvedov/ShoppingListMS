@@ -6,14 +6,15 @@ import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,7 +71,9 @@ class HomeFragment : Fragment() {
             openAddEntryDialog()
         }
 
+
         binding.mylistToolbar.inflateMenu(R.menu.menu_main)
+
         binding.mylistToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.options_delete_selected -> {
@@ -92,8 +95,11 @@ class HomeFragment : Fragment() {
                 else -> false
             }
         }
+
         return root
     }
+
+
 
     private fun logoutFromApp() {
         findNavController().navigate(R.id.action_HomeFragment_to_LoginFragment)
@@ -183,12 +189,18 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        homeViewModel.signOutUser()
+        LoggerService.info("")
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        LoggerService.info("")
         homeViewModel.signOutUser()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LoggerService.info("")
     }
 }
 

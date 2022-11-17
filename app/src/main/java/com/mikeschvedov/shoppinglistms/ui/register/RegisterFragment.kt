@@ -53,6 +53,8 @@ class RegisterFragment : Fragment() {
         return root
     }
 
+
+
     private fun setObservers() {
         registerViewModel.inviteCodesList.observe(viewLifecycleOwner) { list ->
             allInviteCodesList = list
@@ -89,12 +91,13 @@ class RegisterFragment : Fragment() {
         binding.registerButton.setOnClickListener {
             val email = binding.edittextEmail.text.toString()
             val password = binding.edittextPassword.text.toString()
-            val inviteCode: String
+            var inviteCode: String
             val isValid: Boolean
 
             if (selectedOption == 2){
                 LoggerService.debug("Option 2 was selected, join another list")
                 inviteCode = binding.edittextConfirmJoinlist.text.toString()
+                inviteCode = "ShoppingList-${inviteCode}"
                 if (inviteCode.isNotEmpty()){
                     isValid = validateInviteCode(inviteCode)
                     if (isValid){
@@ -154,6 +157,8 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
+
 
     private fun validateInviteCode(inviteCode: String): Boolean {
         LoggerService.debug("Validating inviteCode: $inviteCode")

@@ -32,7 +32,10 @@ class SettingsFragment : Fragment() {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.invideCodeTextView.text = requireContext().getCurrentListId()
+        // We want to remove the "ShoppingList-" part from the code
+        var rawToken = requireContext().getCurrentListId()
+        rawToken = rawToken.substring(13,20)
+        binding.invideCodeTextView.text = rawToken
 
         return root
     }
