@@ -28,4 +28,5 @@
     <string name="new_password">New Password</string>
     <string name="register">Register</string>
     <string name="invite_code">Invite Code:</string>
+    <string name="application_version">v 0.0.19</string>
 </resources>
