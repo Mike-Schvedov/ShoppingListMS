@@ -21,7 +21,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:theme="@style/Theme.ShoppingListMS.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

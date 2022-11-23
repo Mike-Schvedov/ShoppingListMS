@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
         val user = homeViewModel.getCurrentUser()
         LoggerService.debug("This the user at home fragment on create: ${user?.email}")
         println("========================================================")
+
         // Save current user's connected shop list id - into the shared pref, so the firebase manager
         // can use it to get the full list (the observer will save the data into the sharedpref)
         homeViewModel.getUserConnectedShoppingListID()
@@ -70,7 +71,6 @@ class HomeFragment : Fragment() {
         binding.addNewItemBtn.setOnClickListener {
             openAddEntryDialog()
         }
-
 
         binding.mylistToolbar.inflateMenu(R.menu.menu_main)
 
@@ -195,7 +195,6 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         LoggerService.info("")
-        homeViewModel.signOutUser()
     }
 
     override fun onResume() {

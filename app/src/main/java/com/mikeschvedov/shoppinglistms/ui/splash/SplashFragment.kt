@@ -1,6 +1,5 @@
 package com.mikeschvedov.shoppinglistms.ui.splash
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentSplashBinding
 import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
@@ -41,11 +39,10 @@ class SplashFragment : Fragment() {
         LoggerService.info("This is the current user, at the splash screen: ${user?.email}")
 
         if (user != null) {
-            findNavController().navigate(R.id.action_splashFragment_to_HomeFragment)
+            findNavController().navigate(R.id.action_splashFragment_to_HomeFragment,)
         } else {
             findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
         }
-
         return root
     }
 
