@@ -11,7 +11,9 @@ import com.mikeschvedov.shoppinglistms.databinding.FragmentRegisterBinding
 import com.mikeschvedov.shoppinglistms.databinding.FragmentSettingsBinding
 import com.mikeschvedov.shoppinglistms.ui.register.RegisterViewModel
 import com.mikeschvedov.shoppinglistms.util.getCurrentListId
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingsFragment : Fragment() {
     // ViewModel
     private lateinit var settingsViewModel: SettingsViewModel
