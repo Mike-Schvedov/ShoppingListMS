@@ -11,14 +11,12 @@ import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikeschvedov.shoppinglistms.R
+import com.mikeschvedov.shoppinglistms.data.network.models.NotificationData
+import com.mikeschvedov.shoppinglistms.data.network.models.PushNotification
 import com.mikeschvedov.shoppinglistms.databinding.FragmentHomeBinding
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
@@ -56,10 +54,15 @@ class HomeFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
+
         println("========================================================")
         LoggerService.debug("This is shared pref at home fragment on create: ${requireContext().getCurrentListId()}")
         val user = homeViewModel.getCurrentUser()
         LoggerService.debug("This the user at home fragment on create: ${user?.email}")
+        println("========================================================")
+        LoggerService.debug("Subscribing device to notification topic")
+        //TODO  We should subscribe to the topic using the list id - we also do it in the observe method, when the list id is refreshing
+        homeViewModel.subscribeDeviceToTopic()
         println("========================================================")
 
         // Save current user's connected shop list id - into the shared pref, so the firebase manager
@@ -114,6 +117,8 @@ class HomeFragment : Fragment() {
             LoggerService.debug("OBSERVING THE CURRENT LIST ID IN HOME FRAGMENT: $id")
             // Saving connected list into the sharedPref
             requireContext().setCurrentListId(id)
+            // Subscribing to the topic as the listID
+            homeViewModel.subscribeDeviceToTopic()
             LoggerService.debug("This is shared pref at home fragment after getting the id form database and saving in sharedpref : ${requireContext().getCurrentListId()}")
             homeViewModel.fetchGroceryData()
         }
@@ -143,6 +148,10 @@ class HomeFragment : Fragment() {
             if(nameInput.isNotBlank()){
                 homeViewModel.saveNewEntry(
                     GroceryItem ( name = nameInput, amount = amountInput, marked = false))
+
+                // Sending notification
+                sendNotificationOnItemAddition(nameInput, amountInput)
+
                 // Hiding the soft keyboard
                 if (it != null){
                     val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -166,6 +175,21 @@ class HomeFragment : Fragment() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun sendNotificationOnItemAddition(nameInput: String, amountInput: String) {
+
+        //TODO - at this point we need to get the listID and this will be our  topic
+
+        val itemTitle = "פריט חדש נוסף לרשימה"
+        if(itemTitle.isNotEmpty()){
+            PushNotification(
+                NotificationData(itemTitle, "$amountInput $nameInput"),
+                "/topics/mike"
+            ).also {
+                homeViewModel.sendNotification(it)
+            }
+        }
     }
 
     private fun showAlertDialog() {

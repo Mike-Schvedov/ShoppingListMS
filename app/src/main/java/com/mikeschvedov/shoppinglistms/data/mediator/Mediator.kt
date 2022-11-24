@@ -1,5 +1,6 @@
 package com.mikeschvedov.shoppinglistms.data.mediator
 
+import com.mikeschvedov.shoppinglistms.data.network.models.PushNotification
 import com.mikeschvedov.shoppinglistms.data.repository.RepositoryProtocol
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.models.User
@@ -55,4 +56,11 @@ class Mediator @Inject constructor(
             emit(it)
         }
     }
+
+
+
+    override suspend fun sendNotification(it: PushNotification) {
+        databaseRepository.sendNotification(it)
+    }
+
 }

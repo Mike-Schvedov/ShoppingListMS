@@ -101,13 +101,13 @@ class LoginFragment : Fragment() {
             }
             // ----------------------- Focus Listeners ----------------------- //
             edittextEmail.onFocusChangeListener =
-                View.OnFocusChangeListener { v, hasFocus ->
+                View.OnFocusChangeListener { _, hasFocus ->
                     cardViewEmail.apply {
                         requireContext().setCardFocus(this, hasFocus)
                     }
                 }
             edittextPassword.onFocusChangeListener =
-                View.OnFocusChangeListener { v, hasFocus ->
+                View.OnFocusChangeListener { _, hasFocus ->
                     cardViewPassword.apply {
                         requireContext().setCardFocus(this, hasFocus)
                     }

@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.messaging.FirebaseMessaging
 import com.mikeschvedov.shoppinglistms.data.mediator.MediatorProtocol
+import com.mikeschvedov.shoppinglistms.data.network.models.PushNotification
 import com.mikeschvedov.shoppinglistms.models.GroceryItem
 import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
 import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
@@ -21,7 +23,7 @@ class HomeViewModel @Inject constructor(
     private val mediator: MediatorProtocol,
     private val currentUser: FirebaseUser?,
     private val auth: FirebaseAuth
-    ): ViewModel() {
+) : ViewModel() {
 
     private val adapter = GroceryListAdapter() { itemClicked ->
         _selectedItem.postValue(SingleEvent(itemClicked))
@@ -30,13 +32,13 @@ class HomeViewModel @Inject constructor(
         toggleItemMarked(itemClicked, changedState)
     }
 
-    val groceryListLiveData: LiveData<List<GroceryItem>> get()= _groceryListLiveData
+    val groceryListLiveData: LiveData<List<GroceryItem>> get() = _groceryListLiveData
     private val _groceryListLiveData = MutableLiveData<List<GroceryItem>>()
 
     private val _selectedItem = MutableLiveData<SingleEvent<GroceryItem>>()
     val selectedItem: LiveData<SingleEvent<GroceryItem>> get() = _selectedItem
 
-    val shoppingListID: LiveData<String> get()= _shoppingListID
+    val shoppingListID: LiveData<String> get() = _shoppingListID
     private val _shoppingListID = MutableLiveData<String>()
 
     // ----- REMOTE DATABASE ----- //
@@ -46,7 +48,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchGroceryData(){
+    fun fetchGroceryData() {
         LoggerService.info("fetchGroceryData() - HomeViewModel")
         viewModelScope.launch {
             mediator.fetchGroceryData()
@@ -56,7 +58,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getUserConnectedShoppingListID(){
+    fun getUserConnectedShoppingListID() {
         println("getUserConnectedShoppingListID() - HomeViewModel")
         viewModelScope.launch(Dispatchers.IO) {
             mediator.getUserConnectedShoppingListID()
@@ -67,7 +69,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun toggleItemMarked(item: GroceryItem, isMarked: Boolean){
+    private fun toggleItemMarked(item: GroceryItem, isMarked: Boolean) {
         viewModelScope.launch {
             mediator.toggleItemMarked(item, isMarked)
         }
@@ -86,16 +88,35 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getCurrentUser(): FirebaseUser? {
-       return currentUser
+        return currentUser
     }
 
     fun getAdapter(): GroceryListAdapter {
         return adapter
     }
 
-    fun signOutUser(){
+    fun signOutUser() {
         auth.signOut()
     }
 
+    fun subscribeDeviceToTopic() {
+        FirebaseMessaging.getInstance().subscribeToTopic("mike")
+            .addOnCompleteListener {
+            if (it.isSuccessful) {
+                LoggerService.info("successfully subscribed to the topic")
+            } else {
+                LoggerService.info("failed to subscribe to the topic")
+            }
+        }
+            .addOnFailureListener {
+                LoggerService.info("failed to subscribe to the topic : ${it.message}")
+            }
+    }
+
+    fun sendNotification(it: PushNotification) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mediator.sendNotification(it)
+        }
+    }
 
 }

@@ -66,8 +66,6 @@ class FirebaseManager @Inject constructor(
     fun getAllValidInviteCodes(callback: OnInviteCodeChangedListener){
         databaseReference.child(usersRoot).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val id = dataSnapshot.child("shoppinglistid").value.toString()
-                //TODO simply get the ids and chop their first 7 characters
                 val allFullIDs = dataSnapshot.children.mapNotNull { it.key }.toList()
                 allFullIDs.forEach{
                     println("These are all the existing id:$it")
