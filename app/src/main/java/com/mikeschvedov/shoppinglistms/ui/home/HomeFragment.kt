@@ -23,6 +23,7 @@ import com.mikeschvedov.shoppinglistms.ui.adapters.GroceryListAdapter
 import com.mikeschvedov.shoppinglistms.util.getCurrentListId
 import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import com.mikeschvedov.shoppinglistms.util.setCurrentListId
+import com.mikeschvedov.shoppinglistms.util.setMessageLockState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,10 +61,8 @@ class HomeFragment : Fragment() {
         val user = homeViewModel.getCurrentUser()
         LoggerService.debug("This the user at home fragment on create: ${user?.email}")
         println("========================================================")
-        LoggerService.debug("Subscribing device to notification topic")
-        //TODO  We should subscribe to the topic using the list id - we also do it in the observe method, when the list id is refreshing
-        homeViewModel.subscribeDeviceToTopic()
-        println("========================================================")
+        // Making sure the lock state is false, so we can receive messages
+        requireContext().setMessageLockState(false)
 
         // Save current user's connected shop list id - into the shared pref, so the firebase manager
         // can use it to get the full list (the observer will save the data into the sharedpref)
@@ -80,7 +79,7 @@ class HomeFragment : Fragment() {
         binding.mylistToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.options_delete_selected -> {
-                   homeViewModel.deleteMarkedItems()
+                    homeViewModel.deleteMarkedItems()
                     true
                 }
                 R.id.options_delete_all -> {
@@ -103,7 +102,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
     private fun logoutFromApp() {
         findNavController().navigate(R.id.action_HomeFragment_to_LoginFragment)
         homeViewModel.signOutUser()
@@ -113,12 +111,13 @@ class HomeFragment : Fragment() {
         homeViewModel.groceryListLiveData.observe(viewLifecycleOwner) { items: List<GroceryItem> ->
             adapter.setNewData(items)
         }
-        homeViewModel.shoppingListID.observe(viewLifecycleOwner) { id ->
-            LoggerService.debug("OBSERVING THE CURRENT LIST ID IN HOME FRAGMENT: $id")
+        homeViewModel.shoppingListID.observe(viewLifecycleOwner) { listID ->
+            LoggerService.debug("OBSERVING THE CURRENT LIST ID IN HOME FRAGMENT: $listID")
             // Saving connected list into the sharedPref
-            requireContext().setCurrentListId(id)
+            requireContext().setCurrentListId(listID)
+            LoggerService.debug("Subscribing device to notification topic")
             // Subscribing to the topic as the listID
-            homeViewModel.subscribeDeviceToTopic()
+            homeViewModel.subscribeDeviceToTopic(listID)
             LoggerService.debug("This is shared pref at home fragment after getting the id form database and saving in sharedpref : ${requireContext().getCurrentListId()}")
             homeViewModel.fetchGroceryData()
         }
@@ -128,7 +127,7 @@ class HomeFragment : Fragment() {
         findNavController().navigate(R.id.action_HomeFragment_to_settingsFragment)
     }
 
-    private fun openAddEntryDialog(){
+    private fun openAddEntryDialog() {
         // Creating a dialog
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -145,21 +144,23 @@ class HomeFragment : Fragment() {
 
             println("$nameInput | $amountInput")
 
-            if(nameInput.isNotBlank()){
+            if (nameInput.isNotBlank()) {
                 homeViewModel.saveNewEntry(
-                    GroceryItem ( name = nameInput, amount = amountInput, marked = false))
+                    GroceryItem(name = nameInput, amount = amountInput, marked = false)
+                )
 
                 // Sending notification
                 sendNotificationOnItemAddition(nameInput, amountInput)
 
                 // Hiding the soft keyboard
-                if (it != null){
-                    val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                if (it != null) {
+                    val imm =
+                        activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(it.windowToken, 0)
                 }
                 // Closing the dialog
                 dialog.dismiss()
-            }else{
+            } else {
                 showAlertDialog()
             }
         }
@@ -167,8 +168,9 @@ class HomeFragment : Fragment() {
         val cancelBTN = dialog.findViewById<TextView>(R.id.cancel_button)
         cancelBTN.setOnClickListener {
             // Hiding the soft keyboard
-            if (it != null){
-                val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (it != null) {
+                val imm =
+                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(it.windowToken, 0)
             }
             // Closing the dialog
@@ -178,15 +180,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun sendNotificationOnItemAddition(nameInput: String, amountInput: String) {
-
-        //TODO - at this point we need to get the listID and this will be our  topic
+        // Getting the topic (is the same as the listId)
+        val topic = requireContext().getCurrentListId()
 
         val itemTitle = "פריט חדש נוסף לרשימה"
-        if(itemTitle.isNotEmpty()){
+        if (itemTitle.isNotEmpty()) {
             PushNotification(
                 NotificationData(itemTitle, "$amountInput $nameInput"),
-                "/topics/mike"
+                "/topics/$topic"
             ).also {
+                //Trigger Lock State
+                requireContext().setMessageLockState(true)
+                LoggerService.info("Sent message to topic: /topics/$topic")
+                //Sending the Notification
                 homeViewModel.sendNotification(it)
             }
         }
@@ -199,8 +205,8 @@ class HomeFragment : Fragment() {
         // set message of alert dialog
         dialogBuilder.setMessage("No item provided!")
             .setCancelable(false)
-            .setNegativeButton("Ok", DialogInterface.OnClickListener {
-                    dialog, _ -> dialog.cancel()
+            .setNegativeButton("Ok", DialogInterface.OnClickListener { dialog, _ ->
+                dialog.cancel()
             })
         // create dialog box
         val alert = dialogBuilder.create()

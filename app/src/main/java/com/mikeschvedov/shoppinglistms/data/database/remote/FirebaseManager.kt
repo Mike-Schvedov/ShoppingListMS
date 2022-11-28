@@ -16,9 +16,9 @@ import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import javax.inject.Inject
 
 class FirebaseManager @Inject constructor(
-    private  val database: FirebaseDatabase,
+    private val database: FirebaseDatabase,
     private val firebaseAuth: FirebaseAuth,
-     private val context: Context
+    private val context: Context
 ) {
 
     private val databaseReference = database.reference
@@ -46,31 +46,33 @@ class FirebaseManager @Inject constructor(
             }
     }
 
-    fun getUserConnectedShoppingListID(callback: OnStringChangedListener){
+    fun getUserConnectedShoppingListID(callback: OnStringChangedListener) {
         println("getUserConnectedShoppingListID() - Firebase")
-        val currentUserID = getCurrentUserUID() //This has to be here!! otherwise it gets the wrong id
+        val currentUserID =
+            getCurrentUserUID() //This has to be here!! otherwise it gets the wrong id
         LoggerService.debug(" user id = $currentUserID")
-        databaseReference.child(usersRoot).child(currentUserID).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val id = dataSnapshot.child("shoppinglistid").value.toString()
-                LoggerService.debug("RETURNING THIS ID FROM FIREBASE: $id based on this user: ${getCurrentUserUID()}")
-                callback.onChange(id)
-            }
+        databaseReference.child(usersRoot).child(currentUserID)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val id = dataSnapshot.child("shoppinglistid").value.toString()
+                    LoggerService.debug("RETURNING THIS ID FROM FIREBASE: $id based on this user: ${getCurrentUserUID()}")
+                    callback.onChange(id)
+                }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                LoggerService.error("There was some error reading the data")
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    LoggerService.error("There was some error reading the data")
+                }
+            })
     }
 
-    fun getAllValidInviteCodes(callback: OnInviteCodeChangedListener){
+    fun getAllValidInviteCodes(callback: OnInviteCodeChangedListener) {
         databaseReference.child(usersRoot).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val allFullIDs = dataSnapshot.children.mapNotNull { it.key }.toList()
-                allFullIDs.forEach{
+                allFullIDs.forEach {
                     println("These are all the existing id:$it")
                 }
-                val afterMapping = allFullIDs.map { "ShoppingList-"+ it.substring(0,7) }
+                val afterMapping = allFullIDs.map { "ShoppingList-" + it.substring(0, 7) }
                 afterMapping.forEach {
                     println("These are all the existing id after mapping:$it")
                 }
@@ -95,7 +97,8 @@ class FirebaseManager @Inject constructor(
     }
 
     fun updateItemIsMarked(item: GroceryItem, isMarked: Boolean) {
-        databaseReference.child(shoppingRoot).child(currentListId).child(item.id).child("marked").setValue(isMarked)
+        databaseReference.child(shoppingRoot).child(currentListId).child(item.id).child("marked")
+            .setValue(isMarked)
             .addOnSuccessListener {
                 LoggerService.info("Data was updated")
             }
@@ -107,24 +110,27 @@ class FirebaseManager @Inject constructor(
     fun readAllItemsFromFirebase(callback: OnGroceryItemChangedListener) {
         LoggerService.info("fetchGroceryData() - Firebase")
         var items: List<GroceryItem>
-        databaseReference.child(shoppingRoot).child(currentListId).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                items = dataSnapshot.children.mapNotNull { it.getValue(GroceryItem::class.java) }.toList()
-                LoggerService.debug("fetchGroceryData() - FETCHING LIST BASED ON ${currentListId} shoppinglist id")
-                callback.onChange(items)
-            }
+        databaseReference.child(shoppingRoot).child(currentListId)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    items =
+                        dataSnapshot.children.mapNotNull { it.getValue(GroceryItem::class.java) }
+                            .toList()
+                    LoggerService.debug("fetchGroceryData() - FETCHING LIST BASED ON ${currentListId} shoppinglist id")
+                    callback.onChange(items)
+                }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                LoggerService.error("There was some error reading the data")
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    LoggerService.error("There was some error reading the data")
+                }
+            })
     }
 
-    fun deleteAll(){
+    fun deleteAll() {
         databaseReference.child(shoppingRoot).child(currentListId).removeValue()
     }
 
-    fun deleteMarkedItems(){
+    fun deleteMarkedItems() {
         // We need this boolean so the onDataChange will not delete entries by itself
         clicked = true
 
@@ -146,7 +152,55 @@ class FirebaseManager @Inject constructor(
                     clicked = false
                 }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    // ------------- TESTING FOR TOPIC VARIATION ---------- //
+
+    fun getNumberOfUsersConnectedToList(callback: OnGroceryItemChangedListener) {
+        var users: List<User>
+        databaseReference.child(usersRoot).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    users =
+                        dataSnapshot.children.mapNotNull { it.getValue(User::class.java) }
+                            .toList()
+
+                    LoggerService.info("These are all the useres connected to this list")
+                    users.forEach {
+                        LoggerService.info("|| ${it.email} ||")
+                    }
+
+                 //   callback.onChange(users)
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    LoggerService.error("There was some error reading the data")
+                }
+            })
+    }
+
+
+    fun getUserPositionInTheList(callback: OnGroceryItemChangedListener) {
+        var users: List<User>
+        databaseReference.child(usersRoot).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                users =
+                    dataSnapshot.children.mapNotNull { it.getValue(User::class.java) }
+                        .toList()
+
+                LoggerService.info("These are all the useres connected to this list")
+                users.forEach {
+                    LoggerService.info("|| ${it.email} ||")
+                }
+
+                //   callback.onChange(users)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                LoggerService.error("There was some error reading the data")
+            }
         })
     }
 

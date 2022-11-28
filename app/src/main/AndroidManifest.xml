@@ -18,7 +18,7 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.ShoppingListMS"
         tools:targetApi="31">
-        <service android:name=".data.database.remote.NotificationService"
+        <service android:name=".data.services.NotificationService"
             android:exported="false"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>

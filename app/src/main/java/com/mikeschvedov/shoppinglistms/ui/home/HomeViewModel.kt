@@ -99,17 +99,18 @@ class HomeViewModel @Inject constructor(
         auth.signOut()
     }
 
-    fun subscribeDeviceToTopic() {
-        FirebaseMessaging.getInstance().subscribeToTopic("mike")
+    fun subscribeDeviceToTopic(listId: String) {
+        // the topic is the same as the listID
+        FirebaseMessaging.getInstance().subscribeToTopic(listId)
             .addOnCompleteListener {
             if (it.isSuccessful) {
-                LoggerService.info("successfully subscribed to the topic")
+                LoggerService.info("successfully subscribed to the topic: $listId")
             } else {
-                LoggerService.info("failed to subscribe to the topic")
+                LoggerService.info("failed to subscribe to the topic: $listId")
             }
         }
             .addOnFailureListener {
-                LoggerService.info("failed to subscribe to the topic : ${it.message}")
+                LoggerService.info("failed to subscribe to the topic: $listId : ${it.message}")
             }
     }
 
