@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.mikeschvedov.shoppinglistms.R
 import com.mikeschvedov.shoppinglistms.databinding.FragmentSplashBinding
 import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
+import com.mikeschvedov.shoppinglistms.util.permissions.PermissionManager
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -19,8 +20,10 @@ class SplashFragment : Fragment() {
     private lateinit var splashViewModel: SplashViewModel
 
     // Binding
-    private var _binding:  FragmentSplashBinding? = null
+    private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
+
+    private val permissionManager = PermissionManager.from(this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,8 +41,21 @@ class SplashFragment : Fragment() {
 
         LoggerService.info("This is the current user, at the splash screen: ${user?.email}")
 
+//        if (VERSION.SDK_INT >= Build.VERSION_CODES.Teremisu){
+//            permissionManager
+//                .request(Permission.Camera)
+//                .rationale("We need permission to show Notifications")
+//                .checkPermission { granted: Boolean ->
+//                    if (granted) {
+//                        Toast.makeText(requireContext(), "Permission Granted", Toast.LENGTH_SHORT).show()
+//                    } else {
+//                        Toast.makeText(requireContext(), "No Permission to show notifications", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//        }
+
         if (user != null) {
-            findNavController().navigate(R.id.action_splashFragment_to_HomeFragment,)
+            findNavController().navigate(R.id.action_splashFragment_to_HomeFragment)
         } else {
             findNavController().navigate(R.id.action_splashFragment_to_LoginFragment)
         }

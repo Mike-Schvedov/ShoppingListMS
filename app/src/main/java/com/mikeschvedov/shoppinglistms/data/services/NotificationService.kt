@@ -1,5 +1,6 @@
 package com.mikeschvedov.shoppinglistms.data.services
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -7,9 +8,11 @@ import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mikeschvedov.shoppinglistms.MainActivity
@@ -46,7 +49,7 @@ class NotificationService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        if (!getMessageLockState()) {
+        if (!getMessageLockState() && TeremisuPermissionsCheck()) {
             LoggerService.info("Lock State is False, will NOT ignore this message")
 
             // Create a notification on our device
@@ -55,7 +58,10 @@ class NotificationService : FirebaseMessagingService() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val notificationID = Random.nextInt()
 
-            createNotificationChannel(notificationManager)
+            // Keep this check here for future projects to know
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                createNotificationChannel(notificationManager)
+            }
 
             // clears other activities until our MainActivity opens up
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -78,6 +84,20 @@ class NotificationService : FirebaseMessagingService() {
             //After ignoring the message, we set the lock state back to false
             setMessageLockState(false)
         }
+    }
+
+    private fun TeremisuPermissionsCheck(): Boolean {
+//        // If we are above level 33, check permissions
+//        //TODO also need to add the permission into the manifest
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Teremisu){
+//            return  ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+//        }else{
+//            return true
+//        }
+
+        //just for now that the content is disabled
+        return true
     }
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
