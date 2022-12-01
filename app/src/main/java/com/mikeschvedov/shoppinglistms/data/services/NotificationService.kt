@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
 import android.content.Intent
@@ -13,6 +14,7 @@ import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.google.android.datatransport.runtime.scheduling.jobscheduling.SchedulerConfig.Flag
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mikeschvedov.shoppinglistms.MainActivity
@@ -49,7 +51,7 @@ class NotificationService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        if (!getMessageLockState() && TeremisuPermissionsCheck()) {
+        if (!getMessageLockState() && tiramisuPermissionsCheck()) {
             LoggerService.info("Lock State is False, will NOT ignore this message")
 
             // Create a notification on our device
@@ -66,11 +68,11 @@ class NotificationService : FirebaseMessagingService() {
             // clears other activities until our MainActivity opens up
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-            val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_ONE_SHOT)
+            val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_IMMUTABLE)
             val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(message.data["title"])
                 .setContentText(message.data["message"])
-                .setColor(Color.parseColor("#FF9800")) // orange_medium
+                .setColor(Color.GREEN)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
@@ -86,18 +88,15 @@ class NotificationService : FirebaseMessagingService() {
         }
     }
 
-    private fun TeremisuPermissionsCheck(): Boolean {
-//        // If we are above level 33, check permissions
-//        //TODO also need to add the permission into the manifest
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Teremisu){
-//            return  ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-//        }else{
-//            return true
-//        }
-
-        //just for now that the content is disabled
-        return true
+    private fun tiramisuPermissionsCheck(): Boolean {
+        // If we are above level 33, check permissions
+        //TODO also need to add the permission into the manifest
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            return  ContextCompat.checkSelfPermission(this,
+                Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        }else{
+            return true
+        }
     }
 
     private fun createNotificationChannel(notificationManager: NotificationManager) {
@@ -110,7 +109,7 @@ class NotificationService : FirebaseMessagingService() {
         ).apply {
             description = "Used to notify about new items added to the list"
             enableLights(true)
-            lightColor = Color.parseColor("#FF5722") // orange_strong
+            lightColor = Color.GREEN
         }
         notificationManager.createNotificationChannel(channel)
     }
