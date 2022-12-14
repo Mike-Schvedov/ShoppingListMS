@@ -59,7 +59,6 @@
         android:textCursorDrawable="@color/black"
         android:textSize="22sp"
 
-        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@id/amount_edittext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -76,7 +75,7 @@
         android:fontFamily="@font/baloo"
         android:gravity="center"
         android:hint="Amount"
-        android:inputType="number"
+        android:inputType="text"
         android:paddingHorizontal="16dp"
         android:paddingVertical="8dp"
         android:selectAllOnFocus="true"
@@ -85,7 +84,6 @@
         android:textColorHint="@color/orange_weak"
         android:textCursorDrawable="@color/black"
         android:textSize="22sp"
-        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@id/guideline_2_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
