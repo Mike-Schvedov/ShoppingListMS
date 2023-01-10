@@ -3,14 +3,16 @@ package com.mikeschvedov.shoppinglistms.ui.home
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.DialogInterface.OnShowListener
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +27,7 @@ import com.mikeschvedov.shoppinglistms.util.logging.LoggerService
 import com.mikeschvedov.shoppinglistms.util.setCurrentListId
 import com.mikeschvedov.shoppinglistms.util.setMessageLockState
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -79,11 +82,15 @@ class HomeFragment : Fragment() {
         binding.mylistToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.options_delete_selected -> {
-                    homeViewModel.deleteMarkedItems()
+                    showWarningDialog("Delete selected entries?") {
+                        homeViewModel.deleteMarkedItems()
+                    }
                     true
                 }
                 R.id.options_delete_all -> {
-                    homeViewModel.deleteAll()
+                    showWarningDialog("This will delete all entries.\nAre you sure?") {
+                        homeViewModel.deleteAll()
+                    }
                     true
                 }
                 R.id.options_settings -> {
@@ -212,6 +219,41 @@ class HomeFragment : Fragment() {
         val alert = dialogBuilder.create()
         // set title for alert dialog box
         alert.setTitle("Alert")
+        // Set text color
+        alert.setOnShowListener(OnShowListener { dialog -> //
+            val buttonNegative: Button = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+            buttonNegative.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_strong))
+        })
+        // show alert dialog
+        alert.show()
+    }
+
+
+    private fun showWarningDialog(msg: String, method: () -> Unit) {
+        // build alert dialog
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+
+        // set message of alert dialog
+        dialogBuilder.setMessage(msg)
+            .setCancelable(false)
+            .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, _ ->
+                method.invoke()
+                dialog.cancel()
+            })
+            .setNegativeButton("No", DialogInterface.OnClickListener { dialog, _ ->
+                dialog.cancel()
+            })
+        // create dialog box
+        val alert = dialogBuilder.create()
+        // set title for alert dialog box
+        alert.setTitle("Warning")
+        // Set text color
+        alert.setOnShowListener(OnShowListener { dialog -> //
+            val buttonPositive: Button = alert.getButton(DialogInterface.BUTTON_POSITIVE)
+            buttonPositive.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_strong))
+            val buttonNegative: Button = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+            buttonNegative.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange_strong))
+        })
         // show alert dialog
         alert.show()
     }
